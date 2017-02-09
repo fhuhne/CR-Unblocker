@@ -1,0 +1,30 @@
+{
+	"manifest_version": 2,
+	"name": "CR-Unblocker",
+	"version": "0.01",
+	"description": "A tool that will set the Crunchyroll Session ID to an American session ID",
+
+	"permissions": [
+		"background",
+		"cookies",
+		"notifications",
+		"storage",
+		"tabs",
+		"<all_urls>"
+	],
+
+	"content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+
+	"browser_action": {
+		"default_icon": "Crunchyroll-512.png"
+	},
+
+	"background": {
+		"scripts": ["background_script.js"]
+	}
+}
