@@ -34,7 +34,6 @@ app.get('/getId', (req, res) => {
 				sessionId: stdout
 			};
 		}
-		console.log(resObject);
 		res.send(resObject);
 	});
 });
