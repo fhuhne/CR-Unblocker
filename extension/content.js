@@ -1,4 +1,5 @@
-/* eslint no-undef: "off" */
+/* global chrome, window, document */
+
 // this extension was heavily inspired by https://github.com/jerryteps/Crunchyroll-Unblocker
 
 // regexp for crunchyroll.com and the US flag

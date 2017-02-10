@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "CR-Unblocker",
-	"version": "0.01",
+	"version": "1.0.0",
 	"description": "A tool that will set the Crunchyroll Session ID to an American session ID",
 
 	"permissions": [

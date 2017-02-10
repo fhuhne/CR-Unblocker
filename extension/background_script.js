@@ -1,6 +1,7 @@
-/* eslint no-undef: "off" */
+/* global fetch, chrome */
 function setUsCookie(tld) {
-	fetch('replace with ip of server.js script')
+	console.log('Setting cookie...');
+	fetch('http://cr.onestay.moe/getId')
 	.then((res) => {
 		// the server should return an object with a value "sessionId" which is a string containing the session id
 		return res.json();
@@ -12,6 +13,14 @@ function setUsCookie(tld) {
 		// setting the cookie and reloading the page when it's done
 		chrome.cookies.set({ url: `http://.crunchyroll${tld}/`, name: 'sess_id', value: sessionId }, () => {
 			chrome.tabs.reload();
+		});
+	})
+	.catch((e) => {
+		chrome.notifications.create({
+			type: 'basic',
+			iconUrl: 'Crunchyroll-512.png',
+			title: 'Error in CR-Unblocker Extension',
+			message: `CR-Unblocker has encountered an error: ${e}`
 		});
 	});
 }
