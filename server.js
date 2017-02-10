@@ -1,5 +1,22 @@
 const express = require('express');
+
+// middleware
+const helmet = require('helmet');
+const RateLimit = require('express-rate-limit');
+
+const limiter = new RateLimit({
+	windowMs: 15 * 60 * 1000,
+	max: 20,
+	delayMs: 0
+});
+
 const app = express();
+// the rate limiter needs this if it's behind a reverse proxy
+app.enable('trust proxy');
+
+// use the middleware
+app.use(helmet());
+app.use(limiter);
 
 const exec = require('child_process').exec;
 
