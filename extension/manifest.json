@@ -4,6 +4,10 @@
 	"version": "1.0.0",
 	"description": "A tool that will set the Crunchyroll Session ID to an American session ID",
 
+	"icons": {
+		"128": "Crunchyroll-512.png"
+	},
+
 	"permissions": [
 		"background",
 		"cookies",
