@@ -1,7 +1,7 @@
 /* global fetch, chrome */
 function setUsCookie(tld) {
 	console.log('Setting cookie...');
-	fetch('http://cr.onestay.moe/getId')
+	fetch('https://cr.onestay.moe/getId')
 	.then((res) => {
 		// the server should return an object with a value "sessionId" which is a string containing the session id
 		return res.json();
