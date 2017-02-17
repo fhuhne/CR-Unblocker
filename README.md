@@ -23,3 +23,8 @@ If you are really concerned about security you can run it yourself. I will give 
 
 ##Contributing
 The extension is currently still under development. I plan on adding some more features. If you have any idea on what to add feel free to contribute to the project.
+
+##Support me
+If you like my work and would like to help me cover the server cost consider becoming a Patreon: https://www.patreon.com/onestay
+
+This would really help me out!
