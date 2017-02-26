@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>CR-Unblocker</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="./style.css" rel="stylesheet">
+	</head>
+	<body>
+		<h3>Site to load on click</h3>
+		<form>
+			<input type="radio" name="url" value="/" checked id="radio-button"> Homepage <br>
+			<input type="radio" name="url" value="/home/queue" id="radio-button"> Queue <br>
+			<hr>
+			<input type="checkbox" name="dontShowAgain" value="false"> Dont't show again <br>
+			<hr>
+			<button type="button" id="openCrButton">Open Crunchyroll</button>
+			<div id="debug"></div>
+		</form>
+		<script src="./popupJs.js"></script>
+	</body>
+</html>

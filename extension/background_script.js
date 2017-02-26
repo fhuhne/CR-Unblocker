@@ -27,13 +27,18 @@ function setUsCookie(tld) {
 
 // when the icon in the taskbar is clicked it will open the cr site and start the function
 chrome.browserAction.onClicked.addListener(() => {
-	setUsCookie('.com');
-	chrome.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+//	setUsCookie('.com');
+//	chrome.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
 });
 
 // when it recives the message from the content script this will execute and call the function with the correct tld
 chrome.runtime.onMessage.addListener((message) => {
-	setUsCookie(message.msg);
+	if (!message.msg) {
+		chrome.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+		setUsCookie('.com');
+	} else if (message.msg) {
+		setUsCookie(message.msg);
+	}
 });
 
 chrome.runtime.onStartup.addListener(() => {
