@@ -39,7 +39,7 @@ app.get('/getId', (req, res) => {
 });
 
 // process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 app.listen(port, () => {
 	console.log(`Listening on port ${port}`);
 });
