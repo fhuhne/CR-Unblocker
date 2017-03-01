@@ -21,7 +21,7 @@ app.use(limiter);
 const exec = require('child_process').exec;
 
 app.get('/getId', (req, res) => {
-	exec('node server/getSessionId.js', (error, stdout, stderr) => {
+	exec('node getSessionId.js', (error, stdout, stderr) => {
 		if (error) {
 			console.log(stderr);
 			res.status(500).send({
