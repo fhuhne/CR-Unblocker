@@ -1,24 +1,50 @@
 /* global fetch, chrome */
+const mainServer = 'https://cr.onestay.moe/getid';
+const backupServer = 'https://rubbix.net/crunchyroll/';
+
 function setUsCookie(tld) {
 	console.log('Setting cookie...');
-	fetch('https://cr.onestay.moe/getid')
-	.then((res) => {
-		// the server should return an object with a value "sessionId" which is a string containing the session id
-		return res.json();
-	}).then((res) => {
-		if (!res.ok) {
-			return createError(res.error);
-		}
-		// deleting the cookie sess_id
-		chrome.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' });
-		// setting the cookie and reloading the page when it's done
-		chrome.cookies.set({ url: `http://.crunchyroll${tld}/`, name: 'sess_id', value: res.sessionId }, () => {
-			chrome.tabs.reload();
-		});
-	})
+	console.log('Trying to fetch main server...');
+
+	fetchServer(tld, mainServer)
+	.then(sessId => setCookie(sessId, tld))
 	.catch((e) => {
-		// if the fetch fails, this should catch the error
-		createError(e);
+		console.log(`Got error ${e}. Trying backup server...`);
+		fetchServer(tld, backupServer)
+		.then(sessId => setCookie(sessId, tld))
+		.catch((_e) => {
+			createError(`Main server and backup server couldn't get an session id`);
+			console.log(_e);
+		});
+	});
+}
+
+function fetchServer(tld, uri) {
+	return new Promise((resolve, reject) => {
+		fetch(uri)
+		.then((res) => {
+			return res.json();
+		})
+		.then((res) => {
+			if (!res.ok) {
+				reject(res.error);
+			}
+
+			resolve(res.sessionId);
+		})
+		.catch((e) => {
+			reject(e);
+		});
+	});
+}
+
+function setCookie(id, tld) {
+	console.log('got session id. Setting cookie.');
+	// deleting the cookie sess_id
+	chrome.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' });
+	// setting the cookie and reloading the page when it's done
+	chrome.cookies.set({ url: `http://.crunchyroll${tld}/`, name: 'sess_id', value: id }, () => {
+		chrome.tabs.reload();
 	});
 }
 
@@ -27,7 +53,7 @@ function createError(e) {
 		type: 'basic',
 		iconUrl: 'Crunchyroll-512.png',
 		title: 'CR-Unblocker has encountered an error',
-		message: `Error Message: ${e}`
+		message: e
 	});
 }
 
