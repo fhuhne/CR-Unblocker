@@ -14,7 +14,8 @@
 		"notifications",
 		"storage",
 		"tabs",
-		"<all_urls>"
+		"http://.crunchyroll.com/",
+		"http://crunchyroll.com/"
 	],
 
 	"content_scripts": [
