@@ -12,10 +12,6 @@ let hostname = window.location.hostname;
 if (crunchyryollRegExp.test(hostname)) {
 	if (!isUs()) {
 		chrome.runtime.sendMessage({ msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
-		document.getElementsByTagName('ul')[12]
-			.getElementsByTagName('li')[0]
-			.firstChild
-			.click();
 	}
 }
 

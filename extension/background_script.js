@@ -42,9 +42,13 @@ function setCookie(id, tld) {
 	console.log('got session id. Setting cookie.');
 	// deleting the cookie sess_id
 	chrome.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' });
+	chrome.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'c_locale' });
+
 	// setting the cookie and reloading the page when it's done
 	chrome.cookies.set({ url: `http://.crunchyroll${tld}/`, name: 'sess_id', value: id }, () => {
-		chrome.tabs.reload();
+		chrome.cookies.set({ url: `http://.crunchyroll${tld}/`, name: 'c_locale', value: 'enUS' }, () => {
+			chrome.tabs.reload();
+		});
 	});
 }
 
