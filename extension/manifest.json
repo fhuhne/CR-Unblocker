@@ -15,7 +15,10 @@
 		"notifications",
 		"storage",
 		"tabs",
-		"<all_urls>"
+		"http://.crunchyroll.com/",
+		"http://crunchyroll.com/",
+		"https://cr.onestay.moe/",
+		"https://crunchy.rubbix.net/"
 	],
 
 	"content_scripts": [{
