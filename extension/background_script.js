@@ -1,6 +1,6 @@
 /* global fetch, chrome */
 const mainServer = 'https://cr.onestay.moe/getid';
-const backupServer = 'https://rubbix.net/crunchyroll/';
+const backupServer = 'https://crunchy.rubbix.net/';
 
 function setUsCookie(tld) {
 	console.log('Setting cookie...');
