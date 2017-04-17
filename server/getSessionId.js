@@ -1,26 +1,18 @@
-// https://github.com/jerryteps/Crunchyroll-Unblocker/issues/3#issuecomment-278598931
+function makeId() {
+	let id = '';
 
-const cloudscraper = require('cloudscraper');
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-const URL = 'http://www.crunchyroll.com';
+	for (var i = 0; i < 32; i++) {
+		id += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
 
-cloudscraper.get(URL, (err, res) => {
+	return id;
+}
+
+const request = require('request');
+request(`https://api.crunchyroll.com/start_session.0.json?device_id=${makeId()}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h&version=2313.8&locale=enUS`, (err, res, body) => {
 	if (err) return process.stderr.write(err);
-	if (res.statusCode !== 200) return process.stderr.write(`statusCode isn't 200: ${res.statusCode}`);
-
-	let headers = {};
-	headers[res.headers['set-cookie'][0].match(/(.*?)=(.*?);/)[1]] = res.headers['set-cookie'][0].match(/(.*?)=(.*?);/)[2];
-	headers[res.headers['set-cookie'][1].match(/(.*?)=(.*?);/)[1]] = res.headers['set-cookie'][1].match(/(.*?)=(.*?);/)[2];
-
-	cloudscraper.request({
-		headers: headers,
-		url: URL,
-		method: 'GET'
-	}, (_err, _res) => {
-		if (_err) return process.stderr.write(_err);
-		if (_res.statusCode !== 200) return process.stderr.write(`statusCode isn't 200: ${_res.statusCode}`);
-		let sessionId = _res.headers['set-cookie'][0].match(/(.*?)=(.*?);/)[2];
-
-		process.stdout.write(sessionId);
-	});
+	body = JSON.parse(body);
+	process.stdout.write(body.data.session_id);
 });
