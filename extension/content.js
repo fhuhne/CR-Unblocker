@@ -13,6 +13,12 @@ let hostname = window.location.hostname;
 // if the site is crunchyroll.com it will start the background_script.js with the tld as a message for cookie storing
 if (crunchyryollRegExp.test(hostname)) {
 	if (!isUs()) {
+		browser.runtime.onMessage.addListener((message) => {
+			console.log('reloading');
+			if (message.msg == 'reload') {
+				location.reload(true);
+			}
+		});
 		browser.runtime.sendMessage({ msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
 	}
 }

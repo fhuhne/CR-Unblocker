@@ -50,7 +50,17 @@ function setCookie(id, tld) {
 			browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'sess_id', value: id, domain: `crunchyroll${tld}`, httpOnly: true }, () => {
 				browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'c_locale', value: 'enUS', domain: `crunchyroll${tld}`, httpOnly: true }, () => {
 					console.log('done: ' + id);
-					alert('please reload your tab to change the region to us');
+					if (typeof browser.tabs.reload === 'function') {
+						browser.tabs.reload();
+					}
+					else {
+						browser.tabs.query({ currentWindow: true, active: true }, tabs => {
+							tabs.forEach(tab => {
+								console.log('reload tab via content script');
+								browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+							});
+						});
+					}
 				});
 			});
 		});
