@@ -1,6 +1,6 @@
 /* global chrome, window, document */
 
-browser = browser || chrome;
+var browser = browser || chrome;
 
 // this extension was heavily inspired by https://github.com/jerryteps/Crunchyroll-Unblocker
 

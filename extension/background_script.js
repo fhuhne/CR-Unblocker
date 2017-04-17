@@ -1,6 +1,6 @@
 /* global fetch, chrome */
 
-browser = browser || chrome;
+var browser = browser || chrome;
 
 const mainServer = 'https://cr.onestay.moe/getid';
 const backupServer = 'https://crunchy.rubbix.net/';
