@@ -1,36 +1,71 @@
 /* global fetch, chrome */
+const mainServer = 'https://cr.onestay.moe/getid';
+const backupServer = 'https://crunchy.rubbix.net/';
+
 function setUsCookie(tld) {
 	console.log('Setting cookie...');
-	fetch('https://cr.onestay.moe/getId')
-	.then((res) => {
-		// the server should return an object with a value "sessionId" which is a string containing the session id
-		return res.json();
-	}).then((res) => {
-		// the script I'm using is giving me the session id with one space at the end. I don't know why but this should remove it
-		let sessionId = res.sessionId.slice(0, -1);
-		// deleting the cookie sess_id
-		browser.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' }, () => {
-			// setting the cookie and reloading the page when it's done
-			browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'sess_id', value: sessionId, domain: `crunchyroll${tld}`, httpOnly: true }, (cookie) => {
-				console.log('done: ' + cookie.value);
-				alert('please reload your tab to change the region to us');
-			});
-		});
-	})
+	console.log('Trying to fetch main server...');
+
+	fetchServer(tld, mainServer)
+	.then(sessId => setCookie(sessId, tld))
 	.catch((e) => {
-		console.log(e);
-		// browser.notifications.create({
-		// 	type: 'basic',
-		// 	iconUrl: 'Crunchyroll-512.png',
-		// 	title: 'Error in CR-Unblocker Extension',
-		// 	message: `CR-Unblocker has encountered an error: ${e}`
-		// });
+		console.log(`Got error ${e}. Trying backup server...`);
+		fetchServer(tld, backupServer)
+		.then(sessId => setCookie(sessId, tld))
+		.catch((_e) => {
+			createError(`Main server and backup server couldn't get an session id`);
+			console.log(_e);
+		});
+	});
+}
+
+function fetchServer(tld, uri) {
+	return new Promise((resolve, reject) => {
+		fetch(uri)
+		.then((res) => {
+			return res.json();
+		})
+		.then((res) => {
+			if (!res.ok) {
+				reject(res.error);
+			}
+
+			resolve(res.sessionId);
+		})
+		.catch((e) => {
+			reject(e);
+		});
+	});
+}
+
+function setCookie(id, tld) {
+	console.log('got session id. Setting cookie.');
+	// deleting the cookie sess_id
+	browser.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' }, () => {
+		browser.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'c_locale' }, () => {
+			// setting the cookie and reloading the page when it's done
+			browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'sess_id', value: sessionId, domain: `crunchyroll${tld}`, httpOnly: true }, () => {
+				browser.cookies.set({ url: `http://crunchyroll${tld}/` name: 'c_locale', value: 'enUS', domain: `crunchyroll${tld}`, httpOnly: true }, () => {
+					console.log('done: ' + cookie.value);
+					alert('please reload your tab to change the region to us');
+				})
+			})
+		})
+	});
+}
+
+function createError(e) {
+	browser.notifications.create({
+		type: 'basic',
+		iconUrl: 'Crunchyroll-512.png',
+		title: 'CR-Unblocker has encountered an error',
+		message: e
 	});
 }
 
 // when the icon in the taskbar is clicked it will open the cr site and start the function
-// chrome.browserAction.onClicked.addListener(() => {
-// 	setUsCookie('.com');
+// chrome.browseraction.onclicked.addlistener(() => {
+// 	setuscookie('.com');
 // 	chrome.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
 // });
 
@@ -39,6 +74,8 @@ browser.runtime.onMessage.addListener((message) => {
 	setUsCookie(message.msg);
 });
 
-// chrome.runtime.onStartup.addListener(() => {
-// 	setUsCookie('.com');
-// });
+chrome.runtime.onStartup.addListener(() => {
+	setTimeout(() => { setUsCookie('.com'); }, 3000);
+});
+
+// removing this because of https://github.com/Onestay/CR-Unblocker/issues/7

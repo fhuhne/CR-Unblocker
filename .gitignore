@@ -3,3 +3,5 @@
 extension.zip
 extension.crx
 extension.pem
+.vscode
+*.log

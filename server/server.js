@@ -21,25 +21,24 @@ app.use(limiter);
 const exec = require('child_process').exec;
 
 app.get('/getId', (req, res) => {
-	exec('node getSessionId.js', (error, stdout) => {
-		let resObject;
+	exec('node getSessionId.js', (error, stdout, stderr) => {
 		if (error) {
-			resObject = {
+			console.log(stderr);
+			res.status(500).send({
 				ok: false,
-				error: error
-			};
+				error: stderr
+			});
 		} else {
-			resObject = {
+			res.status(200).send({
 				ok: true,
 				sessionId: stdout
-			};
+			});
 		}
-		res.send(resObject);
 	});
 });
 
 // process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001; // eslint-disable-line
 app.listen(port, () => {
 	console.log(`Listening on port ${port}`);
 });
