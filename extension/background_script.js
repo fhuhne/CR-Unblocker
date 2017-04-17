@@ -67,10 +67,10 @@ function createError(e) {
 }
 
 // when the icon in the taskbar is clicked it will open the cr site and start the function
-// chrome.browseraction.onclicked.addlistener(() => {
-// 	setuscookie('.com');
-// 	chrome.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
-// });
+browser.browserAction.onClicked.addListener(() => {
+	setUsCookie('.com');
+	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+});
 
 // when it recives the message from the content script this will execute and call the function with the correct tld
 browser.runtime.onMessage.addListener((message) => {
