@@ -31,7 +31,7 @@
 	},
 
 	"background": {
-		"page": "background.html",
+		"scripts": [ "background_script.js" ],
 		"persistent": true
 	}
 }

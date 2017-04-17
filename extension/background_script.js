@@ -44,13 +44,13 @@ function setCookie(id, tld) {
 	browser.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'sess_id' }, () => {
 		browser.cookies.remove({ url: `http://crunchyroll${tld}/`, name: 'c_locale' }, () => {
 			// setting the cookie and reloading the page when it's done
-			browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'sess_id', value: sessionId, domain: `crunchyroll${tld}`, httpOnly: true }, () => {
-				browser.cookies.set({ url: `http://crunchyroll${tld}/` name: 'c_locale', value: 'enUS', domain: `crunchyroll${tld}`, httpOnly: true }, () => {
-					console.log('done: ' + cookie.value);
+			browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'sess_id', value: id, domain: `crunchyroll${tld}`, httpOnly: true }, () => {
+				browser.cookies.set({ url: `http://crunchyroll${tld}/`, name: 'c_locale', value: 'enUS', domain: `crunchyroll${tld}`, httpOnly: true }, () => {
+					console.log('done: ' + id);
 					alert('please reload your tab to change the region to us');
-				})
-			})
-		})
+				});
+			});
+		});
 	});
 }
 
@@ -74,7 +74,7 @@ browser.runtime.onMessage.addListener((message) => {
 	setUsCookie(message.msg);
 });
 
-chrome.runtime.onStartup.addListener(() => {
+browser.runtime.onStartup.addListener(() => {
 	setTimeout(() => { setUsCookie('.com'); }, 3000);
 });
 
