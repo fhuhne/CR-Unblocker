@@ -1,5 +1,7 @@
 /* global chrome, window, document */
 
+browser = browser || chrome;
+
 // this extension was heavily inspired by https://github.com/jerryteps/Crunchyroll-Unblocker
 
 // regexp for crunchyroll.com and the US flag
