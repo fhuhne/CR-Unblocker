@@ -38,6 +38,6 @@
 
 	"background": {
 		"scripts": [ "background_script.js" ],
-		"persistent": true
+		"persistent": false
 	}
 }
