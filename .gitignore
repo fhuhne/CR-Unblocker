@@ -5,3 +5,4 @@ extension.crx
 extension.pem
 .vscode
 *.log
+package/
