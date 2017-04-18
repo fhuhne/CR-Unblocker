@@ -6,7 +6,9 @@
 	"author": "Onestay",
 
 	"icons": {
-		"128": "Crunchyroll-512.png"
+		"128": "icons/Crunchyroll-128.png",
+		"48": "icons/Crunchyroll-48.png",
+		"24": "icons/Crunchyroll-24.png"
 	},
 
 	"permissions": [
@@ -28,7 +30,9 @@
 
 	"browser_action": {
 		"default_icon": {
-			"128": "Crunchyroll-512.png"
+			"128": "icons/Crunchyroll-128.png",
+			"40": "icons/Crunchyroll-40.png",
+			"20": "icons/Crunchyroll-20.png"
 		}
 	},
 
