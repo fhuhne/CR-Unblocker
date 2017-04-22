@@ -70,7 +70,7 @@ function setCookie(id, tld) {
 function createError(e) {
 	browser.notifications.create({
 		type: 'basic',
-		iconUrl: 'Crunchyroll-512.png',
+		iconUrl: 'icons/Crunchyroll-128.png',
 		title: 'CR-Unblocker has encountered an error',
 		message: e
 	});
