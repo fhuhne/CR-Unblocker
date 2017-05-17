@@ -1,11 +1,22 @@
 {
   "name": "cr_unblocker",
-  "version": "1.0.0",
+  "version": "1.4.0",
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "clean": "echo '=> CLEANING' && rm -rf public && mkdir public",
+    "pretest": "npm run -s clean",
+
+    "test": "echo '=> TESTS' && npm run -s lint",
+    "prebuild": "npm run -s test",
+
+    "lint": "npm run -s lint:js",
+    "lint:js": "echo '-> linting js' && eslint -c .eslintrc.json src/*.js",
+    "lint:test": "echo '-> linting js' && eslint --help",
+
+    "build": "echo '=> BUILD'",
+
+    "watch": "watch 'npm run -s build' src/"
   },
   "author": "Onestay",
   "license": "MIT",
