@@ -7,4 +7,4 @@ branches:
 install:
 - npm install
 script:
-- npm run -s build
+- npm run -s test

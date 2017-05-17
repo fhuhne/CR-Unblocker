@@ -5,14 +5,11 @@
   "main": "server.js",
   "scripts": {
     "clean": "echo '=> CLEANING' && rm -rf public && mkdir public",
-    "pretest": "npm run -s clean",
-
     "test": "echo '=> TESTS' && npm run -s lint",
-    "prebuild": "npm run -s test",
+    "prebuild": "npm run -s test && npm run -s clean",
 
     "lint": "npm run -s lint:js",
     "lint:js": "echo '-> linting js' && eslint -c .eslintrc.json src/*.js",
-    "lint:test": "echo '-> linting js' && eslint --help",
 
     "build": "echo '=> BUILD'",
 
