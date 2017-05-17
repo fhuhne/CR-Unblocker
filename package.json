@@ -11,19 +11,13 @@
     "lint": "npm run -s lint:js",
     "lint:js": "echo '-> linting js' && eslint -c .eslintrc.json src/*.js",
 
-    "build": "echo '=> BUILD'",
+    "build": "echo '=> BUILD' && npm run -s build:zip",
+    "build:zip": "echo '-> building for chrome and firefox stores' && cd src; zip -0r ../public/extension.zip ./*; cd ..",
 
     "watch": "watch 'npm run -s build' src/"
   },
   "author": "Onestay",
   "license": "MIT",
-  "dependencies": {
-    "cloudscraper": "^1.4.1",
-    "express": "^4.14.1",
-    "express-rate-limit": "^2.6.0",
-    "helmet": "^3.4.0",
-    "request": "^2.80.0"
-  },
   "devDependencies": {
     "eslint": "^3.15.0"
   }
