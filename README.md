@@ -21,6 +21,9 @@ If you are really concerned about security you can run it yourself. I will give 
 5. In extension/background_script.js set the URL of the fetch to the url of the server
 6. Add the extension folder as an unpacked extension to chrome.
 
+## Backend Repo
+The repo for the backend is [here](https://github.com/onestay/cr-unblocker-server)
+
 ## Contributing
 The extension is currently still under development. I plan on adding some more features. If you have any idea on what to add feel free to contribute to the project.
 
