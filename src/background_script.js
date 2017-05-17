@@ -75,17 +75,22 @@ function updateCookies(extension, sessionId) {
  */
 function postSetCookie() {
 	console.log('Done!');
-	browser.tabs.query({
-		currentWindow: true,
-		active: true
-	}, tabs => {
-		tabs.forEach(tab => {
-			console.log('reload tab via content script');
-			browser.tabs.sendMessage(tab.id, {
-				msg: 'reload'
+	if (typeof browser.tabs.reload === 'function') {
+		console.log('reload tab using API');
+		browser.tabs.reload();
+	} else {
+		browser.tabs.query({
+			currentWindow: true,
+			active: true
+		}, tabs => {
+			tabs.forEach(tab => {
+				console.log('reload tab via content script');
+				browser.tabs.sendMessage(tab.id, {
+					msg: 'reload'
+				});
 			});
 		});
-	});
+	}
 }
 
 /**
