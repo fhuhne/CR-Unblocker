@@ -1,8 +1,8 @@
 /* global fetch, chrome */
 var browser = browser || chrome;
 
-const MAINSERVER = 'https://cr.onestay.moe/getid';
-const BACKUPSERVER = 'https://crunchy.rubbix.net/';
+const MAINSERVER = 'https://crunchy.rubbix.net/';
+const BACKUPSERVER = 'https://cr.onestay.moe/getid/';
 
 /**
  * Main function fetching and setting the US based cookies
@@ -85,9 +85,7 @@ function postSetCookie() {
 		}, tabs => {
 			tabs.forEach(tab => {
 				console.log('reload tab via content script');
-				browser.tabs.sendMessage(tab.id, {
-					msg: 'reload'
-				});
+				browser.tabs.sendMessage(tab.id, { msg: 'reload' });
 			});
 		});
 	}
@@ -110,9 +108,7 @@ function notifyUser(msg) {
  * Open a new CR tab when the button is pressed
  */
 browser.browserAction.onClicked.addListener(() => {
-	browser.tabs.create({
-		url: 'http://crunchyroll.com/videos/anime/'
-	});
+	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
 });
 
 /**
