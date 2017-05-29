@@ -20,9 +20,9 @@ function isUs() {
  */
 if (!isUs()) {
 	let hostname = window.location.hostname;
-	browser.runtime.sendMessage({
-		msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length)
-	});
+	browser.runtime.sendMessage({	msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
+} else {
+	console.log('You are already registered in the US.');
 }
 
 /**

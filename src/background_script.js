@@ -1,9 +1,9 @@
 /* global fetch, chrome */
 var browser = browser || chrome;
 
-const MAINSERVER = 'https://crunchy.rubbix.net/';
-const BACKUPSERVER = 'https://cr.onestay.moe/getid/';
-
+const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
+const MAINSERVER = `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`;
+const BACKUPSERVER = `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`;
 /**
  * Main function fetching and setting the US based cookies
  * @param {String} extension extension of domain
@@ -34,10 +34,10 @@ function fetchServer(uri) {
 		fetch(uri)
 			.then((res) => res.json())
 			.then((res) => {
-				if (!res.ok) {
+				if (res.error === true) {
 					reject(new Error(res.error));
 				} else {
-					resolve(res.sessionId);
+					resolve(res.data.session_id);
 				}
 			})
 			.catch((e) => reject(e));
@@ -51,7 +51,7 @@ function fetchServer(uri) {
  * @param {String} sessionId  New session ID
  */
 function updateCookies(extension, sessionId) {
-	console.log('got session id. Setting cookie.');
+	console.log(`got session id. Setting cookie ${sessionId}.`);
 	browser.cookies.set({
 		url: `http://crunchyroll${extension}`,
 		name: 'sess_id',
@@ -75,20 +75,15 @@ function updateCookies(extension, sessionId) {
  */
 function postSetCookie() {
 	console.log('Done!');
-	if (typeof browser.tabs.reload === 'function') {
-		console.log('reload tab using API');
-		browser.tabs.reload();
-	} else {
-		browser.tabs.query({
-			currentWindow: true,
-			active: true
-		}, tabs => {
-			tabs.forEach(tab => {
-				console.log('reload tab via content script');
-				browser.tabs.sendMessage(tab.id, { msg: 'reload' });
-			});
+	browser.tabs.query({
+		currentWindow: true,
+		active: true
+	}, tabs => {
+		tabs.forEach(tab => {
+			console.log('reload tab via content script');
+			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
 		});
-	}
+	});
 }
 
 /**
@@ -108,7 +103,7 @@ function notifyUser(msg) {
  * Open a new CR tab when the button is pressed
  */
 browser.browserAction.onClicked.addListener(() => {
-	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+	browser.tabs.create({	url: 'http://crunchyroll.com/videos/anime/'	});
 });
 
 /**
