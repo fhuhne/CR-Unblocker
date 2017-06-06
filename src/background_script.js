@@ -37,7 +37,6 @@ function sequentialFetch(urls, extension) {
  * @return {Promise}     A promise resolving to the the session ID (string)
  */
 function fetchServer(uri) {
-	console.log(uri);
 	return new Promise((resolve, reject) => {
 		fetch(uri)
 			.then(res => {
