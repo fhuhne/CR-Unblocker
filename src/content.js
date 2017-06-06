@@ -14,6 +14,16 @@ function isUs() {
 }
 
 /**
+* Listen for messages and reload the page when asked by the background script
+*/
+browser.runtime.onMessage.addListener((message) => {
+	console.log('Reloading to apply new cookies');
+	if (message.msg === 'reload') {
+		location.reload(true);
+	}
+});
+
+/**
  * This function is called everytime the user visit a crunchyroll page
  * It will ask the background script to get a new cookie if it is not located
  * in the US
@@ -24,13 +34,3 @@ if (!isUs()) {
 } else {
 	console.log('You are already registered in the US.');
 }
-
-/**
- * Reload the page when asked by the background script
- */
-browser.runtime.onMessage.addListener((message) => {
-	console.log('reloading');
-	if (message.msg === 'reload') {
-		location.reload(true);
-	}
-});

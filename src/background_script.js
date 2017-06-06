@@ -2,8 +2,11 @@
 var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
-const MAINSERVER = `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`;
-const BACKUPSERVER = `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`;
+const SERVERS = [
+	`${API_BASE}&device_unchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
+	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`
+];
+
 /**
  * Main function fetching and setting the US based cookies
  * @param {String} extension extension of domain
@@ -11,16 +14,20 @@ const BACKUPSERVER = `${API_BASE}&device_type=com.crunchyroll.iphone&access_toke
 function localizeToUs(extension) {
 	console.log('Setting cookie...');
 	console.log('Trying to fetch main server...');
-	fetchServer(MAINSERVER)
+	SERVERS.shuffle();
+	sequentialFetch(SERVERS, extension);
+}
+
+function sequentialFetch(urls, extension) {
+	fetchServer(urls[0])
 		.then(sessionId => updateCookies(extension, sessionId))
-		.catch((e) => {
-			console.log(`Got error ${e}. Trying backup server...`);
-			fetchServer(BACKUPSERVER)
-				.then(sessionId => updateCookies(extension, sessionId))
-				.catch((_e) => {
-					notifyUser(`Main server and backup server couldn't get a session id`);
-					console.log(_e);
-				});
+		.catch(e => {
+			if (urls.slice(1).length > 0) {
+				sequentialFetch(urls.slice(1), extension)
+			} else {
+				notifyUser(`Main server and backup server couldn't get a session id`);
+				console.log(e);
+			}
 		});
 }
 
@@ -30,14 +37,22 @@ function localizeToUs(extension) {
  * @return {Promise}     A promise resolving to the the session ID (string)
  */
 function fetchServer(uri) {
+	console.log(uri);
 	return new Promise((resolve, reject) => {
 		fetch(uri)
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.error === true) {
+			.then(res => {
+				if (res.ok) {
+					return res.json();
+				}
+				reject(new Error(res.status));
+			})
+			.then(json => {
+				if (json.error === true) {
 					reject(new Error(res.error));
+				} else if (json.data.country_code !== 'US') {
+					reject(new Error('Session id not from the US'));
 				} else {
-					resolve(res.data.session_id);
+					resolve(json.data.session_id);
 				}
 			})
 			.catch((e) => reject(e));
@@ -80,8 +95,10 @@ function postSetCookie() {
 		active: true
 	}, tabs => {
 		tabs.forEach(tab => {
-			console.log('reload tab via content script');
-			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+			console.log('Reload tab via content script');
+			browser.tabs.sendMessage(tab.id, {
+				msg: 'reload'
+			});
 		});
 	});
 }
@@ -103,7 +120,9 @@ function notifyUser(msg) {
  * Open a new CR tab when the button is pressed
  */
 browser.browserAction.onClicked.addListener(() => {
-	browser.tabs.create({	url: 'http://crunchyroll.com/videos/anime/'	});
+	browser.tabs.create({
+		url: 'http://crunchyroll.com/videos/anime/'
+	});
 });
 
 /**
@@ -112,3 +131,16 @@ browser.browserAction.onClicked.addListener(() => {
 browser.runtime.onMessage.addListener((message) => {
 	localizeToUs(message.msg);
 });
+
+/**
+ * Add a method to shuffle arrays randomly
+ */
+Array.prototype.shuffle = function() {
+	var j, x, i;
+	for (i = this.length; i; i--) {
+		j = Math.floor(Math.random() * i);
+		x = this[i - 1];
+		this[i - 1] = this[j];
+		this[j] = x;
+	}
+};
