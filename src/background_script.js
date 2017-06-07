@@ -23,7 +23,7 @@ function sequentialFetch(urls, extension) {
 		.then(sessionId => updateCookies(extension, sessionId))
 		.catch(e => {
 			if (urls.slice(1).length > 0) {
-				sequentialFetch(urls.slice(1), extension)
+				sequentialFetch(urls.slice(1), extension);
 			} else {
 				notifyUser(`Main server and backup server couldn't get a session id`);
 				console.log(e);
@@ -47,7 +47,7 @@ function fetchServer(uri) {
 			})
 			.then(json => {
 				if (json.error === true) {
-					reject(new Error(res.error));
+					reject(new Error(json.message));
 				} else if (json.data.country_code !== 'US') {
 					reject(new Error('Session id not from the US'));
 				} else {
@@ -134,12 +134,12 @@ browser.runtime.onMessage.addListener((message) => {
 /**
  * Add a method to shuffle arrays randomly
  */
-Array.prototype.shuffle = function() {
-	var j, x, i;
-	for (i = this.length; i; i--) {
-		j = Math.floor(Math.random() * i);
-		x = this[i - 1];
-		this[i - 1] = this[j];
-		this[j] = x;
+Array.prototype.shuffle = () => {
+	var swapIndex, tempElement;
+	for (var i = this.length; i; i--) {
+		swapIndex = Math.floor(Math.random() * i);
+		tempElement = this[i - 1];
+		this[i - 1] = this[swapIndex];
+		this[swapIndex] = tempElement;
 	}
 };
