@@ -100,13 +100,6 @@ function notifyUser(msg) {
 }
 
 /**
- * Open a new CR tab when the button is pressed
- */
-browser.browserAction.onClicked.addListener(() => {
-	browser.tabs.create({	url: 'http://crunchyroll.com/videos/anime/'	});
-});
-
-/**
  *  Set a cookie with the extension transmitted from the content script
  */
 browser.runtime.onMessage.addListener((message) => {

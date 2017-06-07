@@ -30,7 +30,9 @@
       "128": "icons/Crunchyroll-128.png",
       "40": "icons/Crunchyroll-40.png",
       "20": "icons/Crunchyroll-20.png"
-    }
+    },
+    "default_title": "CR-Unblocker",
+    "default_popup": "popup.html"
   },
 
   "background": {
