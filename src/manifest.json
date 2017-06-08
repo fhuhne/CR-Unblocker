@@ -17,6 +17,7 @@
     "cookies",
     "notifications",
     "tabs",
+    "storage",
     "*://*.crunchyroll.com/*"
   ],
 

@@ -2,6 +2,7 @@ body {
 	font-family: sans-serif;
 	width: 150px;
 	margin: 0;
+	font-size: 15px;
 }
 
 .top-bar {
@@ -13,7 +14,7 @@ body {
 
 .top-bar p {
 	margin: 0;
-	font-size: 0.8em;
+	font-size: 13px;
 	color: #ddd;
 }
 

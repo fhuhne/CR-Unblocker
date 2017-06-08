@@ -75,13 +75,18 @@ function updateCookies(extension, sessionId) {
  */
 function postSetCookie() {
 	console.log('Done!');
-	browser.tabs.query({
-		currentWindow: true,
-		active: true
-	}, tabs => {
-		tabs.forEach(tab => {
-			console.log('reload tab via content script');
-			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+	browser.storage.local.get({ saveLogin: false, loginData: {} }, (item) => {
+		if (item.saveLogin && item.loginData !== {}) {
+			// TODO: login using item.loginData.username and item.loginData.password
+		}
+		browser.tabs.query({
+			currentWindow: true,
+			active: true
+		}, tabs => {
+			tabs.forEach(tab => {
+				console.log('reload tab via content script');
+				browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+			});
 		});
 	});
 }
