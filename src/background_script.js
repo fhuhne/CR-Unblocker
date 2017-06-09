@@ -2,8 +2,11 @@
 var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
-const MAINSERVER = `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`;
-const BACKUPSERVER = `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`;
+const SERVERS = [
+	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
+	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`
+];
+
 /**
  * Main function fetching and setting the US based cookies
  * @param {String} extension extension of domain
@@ -11,16 +14,20 @@ const BACKUPSERVER = `${API_BASE}&device_type=com.crunchyroll.iphone&access_toke
 function localizeToUs(extension) {
 	console.log('Setting cookie...');
 	console.log('Trying to fetch main server...');
-	fetchServer(MAINSERVER)
+	SERVERS.shuffle();
+	sequentialFetch(SERVERS, extension);
+}
+
+function sequentialFetch(urls, extension) {
+	fetchServer(urls[0])
 		.then(sessionId => updateCookies(extension, sessionId))
-		.catch((e) => {
-			console.log(`Got error ${e}. Trying backup server...`);
-			fetchServer(BACKUPSERVER)
-				.then(sessionId => updateCookies(extension, sessionId))
-				.catch((_e) => {
-					notifyUser(`Main server and backup server couldn't get a session id`);
-					console.log(_e);
-				});
+		.catch(e => {
+			if (urls.slice(1).length > 0) {
+				sequentialFetch(urls.slice(1), extension);
+			} else {
+				notifyUser(`Main server and backup server couldn't get a session id`);
+				console.log(e);
+			}
 		});
 }
 
@@ -32,12 +39,19 @@ function localizeToUs(extension) {
 function fetchServer(uri) {
 	return new Promise((resolve, reject) => {
 		fetch(uri)
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.error === true) {
-					reject(new Error(res.error));
+			.then(res => {
+				if (res.ok) {
+					return res.json();
+				}
+				reject(new Error(res.status));
+			})
+			.then(json => {
+				if (json.error === true) {
+					reject(new Error(json.message));
+				} else if (json.data.country_code !== 'US') {
+					reject(new Error('Session id not from the US'));
 				} else {
-					resolve(res.data.session_id);
+					resolve(json.data.session_id);
 				}
 			})
 			.catch((e) => reject(e));
@@ -129,8 +143,10 @@ function reloadTab() {
 		active: true
 	}, tabs => {
 		tabs.forEach(tab => {
-			console.log('reload tab via content script');
-			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+			console.log('Reload tab via content script');
+			browser.tabs.sendMessage(tab.id, {
+				msg: 'reload'
+			});
 		});
 	});
 }
@@ -154,3 +170,16 @@ function notifyUser(msg) {
 browser.runtime.onMessage.addListener((message) => {
 	localizeToUs(message.msg);
 });
+
+/**
+ * Add a method to shuffle arrays randomly
+ */
+Array.prototype.shuffle = () => {
+	var swapIndex, tempElement;
+	for (var i = this.length; i; i--) {
+		swapIndex = Math.floor(Math.random() * i);
+		tempElement = this[i - 1];
+		this[i - 1] = this[swapIndex];
+		this[swapIndex] = tempElement;
+	}
+};
