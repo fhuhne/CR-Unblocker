@@ -4,7 +4,8 @@ var browser = browser || chrome;
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
 const SERVERS = [
 	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
-	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`
+	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
+	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`
 ];
 
 /**
@@ -15,12 +16,19 @@ function localizeToUs(extension) {
 	console.log('Setting cookie...');
 	console.log('Trying to fetch main server...');
 	SERVERS.shuffle();
-	sequentialFetch(SERVERS, extension);
+	browser.storage.local.get({ saveLogin: false, login: null }, (item) => {
+		var auth = '';
+		if (item.saveLogin && item.login !== null) {
+			console.log('Logging in using auth token...');
+			auth = `&auth=${encodeURIComponent(item.login.auth)}`;
+		}
+		sequentialFetch(SERVERS, extension, auth);
+	});
 }
 
-function sequentialFetch(urls, extension) {
-	fetchServer(urls[0])
-		.then(sessionId => updateCookies(extension, sessionId))
+function sequentialFetch(urls, extension, auth) {
+	fetchServer(urls[0] + auth)
+		.then(sessionData => updateCookies(extension, sessionData))
 		.catch(e => {
 			if (urls.slice(1).length > 0) {
 				sequentialFetch(urls.slice(1), extension);
@@ -34,7 +42,7 @@ function sequentialFetch(urls, extension) {
 /**
  * Fetch a session ID from a server
  * @param  {String} uri URL of the backend server
- * @return {Promise}     A promise resolving to the the session ID (string)
+ * @return {Promise}     A promise resolving to the the session data containing session id and possibly user/auth data
  */
 function fetchServer(uri) {
 	return new Promise((resolve, reject) => {
@@ -51,7 +59,7 @@ function fetchServer(uri) {
 				} else if (json.data.country_code !== 'US') {
 					reject(new Error('Session id not from the US'));
 				} else {
-					resolve(json.data.session_id);
+					resolve(json.data);
 				}
 			})
 			.catch((e) => reject(e));
@@ -62,14 +70,14 @@ function fetchServer(uri) {
  * Update the cookies to the new values
  * Nested callbacks for Edge compatibility
  * @param {String} extension hostname extension
- * @param {String} sessionId  New session ID
+ * @param {Object} sessionData  New session data
  */
-function updateCookies(extension, sessionId) {
-	console.log(`got session id. Setting cookie ${sessionId}.`);
+function updateCookies(extension, sessionData) {
+	console.log(`got session id. Setting cookie ${sessionData.session_id}.`);
 	browser.cookies.set({
 		url: `http://crunchyroll${extension}`,
 		name: 'sess_id',
-		value: sessionId,
+		value: sessionData.session_id,
 		domain: `crunchyroll${extension}`,
 		httpOnly: true
 	}, () => {
@@ -79,7 +87,7 @@ function updateCookies(extension, sessionId) {
 			value: 'enUS',
 			domain: `crunchyroll${extension}`,
 			httpOnly: true
-		}, () => doLogin(sessionId));
+		}, () => doLogin(sessionData));
 	});
 }
 
@@ -107,16 +115,16 @@ function loginUser(sessionId, loginData) {
 /**
  * Function called after the cookies are set
  * Login user if needed
- * @param {String} sessionId current session id
+ * @param {Object} sessionData current session data
  */
-function doLogin(sessionId) {
-	browser.storage.local.get({ saveLogin: false, loginData: {} }, (item) => {
-		if (item.saveLogin && item.loginData !== {}) {
+function doLogin(sessionData) {
+	browser.storage.local.get({ saveLogin: false, loginData: null }, (item) => {
+		if (sessionData.user === null && item.saveLogin && item.loginData !== null) {
 			// login data stored, log the user in
-			console.log('logging user in');
-			loginUser(sessionId, item.loginData)
+			console.log('Logging in using username/password');
+			loginUser(sessionData.session_id, item.loginData)
 				.then((data) => {
-					console.log(`user logged in until ${data.expires}`);
+					console.log(`User logged in until ${data.expires}`);
 					// store auth and expiration, then reload
 					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires } }, reloadTab);
 				})
@@ -125,6 +133,10 @@ function doLogin(sessionId) {
 					console.log(_e);
 					reloadTab();
 				});
+		} else if (sessionData.user !== null && item.saveLogin) {
+			// user was already logged in when starting the session, store the new auth and expiration
+			console.log(`Logged in until ${sessionData.expires}`);
+			browser.storage.local.set({ login: { auth: sessionData.auth, expiration: sessionData.expires } }, reloadTab);
 		} else {
 			// no need to login, reload immediately
 			reloadTab();
@@ -144,9 +156,7 @@ function reloadTab() {
 	}, tabs => {
 		tabs.forEach(tab => {
 			console.log('Reload tab via content script');
-			browser.tabs.sendMessage(tab.id, {
-				msg: 'reload'
-			});
+			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
 		});
 	});
 }
