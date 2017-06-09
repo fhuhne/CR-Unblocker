@@ -65,7 +65,55 @@ function updateCookies(extension, sessionId) {
 			value: 'enUS',
 			domain: `crunchyroll${extension}`,
 			httpOnly: true
-		}, postSetCookie);
+		}, () => doLogin(sessionId));
+	});
+}
+
+/**
+ * Logs in a user using the given login data
+ * @param {String} sessionId current session id
+ * @param {Object} loginData login data (properties username and password are needed)
+ */
+function loginUser(sessionId, loginData) {
+	return new Promise((resolve, reject) => {
+		fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`)
+			.then((res) => res.json())
+			.then((res) => {
+				if (res.error === true) {
+					reject(new Error(res.message));
+				} else {
+					resolve(res.data);
+				}
+			})
+			.catch((e) => reject(e));
+	});
+}
+
+/**
+ * Function called after the cookies are set
+ * Login user if needed
+ * @param {String} sessionId current session id
+ */
+function doLogin(sessionId) {
+	browser.storage.local.get({ saveLogin: false, loginData: {} }, (item) => {
+		if (item.saveLogin && item.loginData !== {}) {
+			// login data stored, log the user in
+			console.log('logging user in');
+			loginUser(sessionId, item.loginData)
+				.then((data) => {
+					console.log(`user logged in until ${data.expires}`);
+					// store auth and expiration, then reload
+					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires } }, reloadTab);
+				})
+				.catch((_e) => {
+					notifyUser('Failed to login, please log in manually.');
+					console.log(_e);
+					reloadTab();
+				});
+		} else {
+			// no need to login, reload immediately
+			reloadTab();
+		}
 	});
 }
 
@@ -73,20 +121,15 @@ function updateCookies(extension, sessionId) {
  * Function called after the cookies are set
  * Reload the current tab to take the changes into account
  */
-function postSetCookie() {
+function reloadTab() {
 	console.log('Done!');
-	browser.storage.local.get({ saveLogin: false, loginData: {} }, (item) => {
-		if (item.saveLogin && item.loginData !== {}) {
-			// TODO: login using item.loginData.username and item.loginData.password
-		}
-		browser.tabs.query({
-			currentWindow: true,
-			active: true
-		}, tabs => {
-			tabs.forEach(tab => {
-				console.log('reload tab via content script');
-				browser.tabs.sendMessage(tab.id, { msg: 'reload' });
-			});
+	browser.tabs.query({
+		currentWindow: true,
+		active: true
+	}, tabs => {
+		tabs.forEach(tab => {
+			console.log('reload tab via content script');
+			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
 		});
 	});
 }

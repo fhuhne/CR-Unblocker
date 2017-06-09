@@ -8,7 +8,7 @@ document.getElementById('open-cr').addEventListener('click', () => {
 document.getElementById('saveLogin').addEventListener('change', (ev) => {
 	browser.storage.local.set({ saveLogin: ev.target.checked });
 	if (!ev.target.checked) {
-		browser.storage.local.remove('loginData');
+		browser.storage.local.remove(['loginData', 'login']);
 	}
 });
 
