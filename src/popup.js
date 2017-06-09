@@ -15,3 +15,7 @@ document.getElementById('saveLogin').addEventListener('change', (ev) => {
 browser.storage.local.get({ saveLogin: false }, (item) => {
 	document.getElementById('saveLogin').checked = item.saveLogin;
 });
+
+document.getElementById('deleteData').addEventListener('click', () => {
+	browser.storage.local.remove(['loginData', 'login']);
+});

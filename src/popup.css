@@ -18,7 +18,7 @@ body {
 	color: #ddd;
 }
 
-#open-cr {
+button {
 	display: block;
 	margin: 5px auto;
 	text-align: center;
