@@ -73,6 +73,7 @@ function updateCookies(extension, sessionId) {
  * Logs in a user using the given login data
  * @param {String} sessionId current session id
  * @param {Object} loginData login data (properties username and password are needed)
+ * @return {Promise} A promise resolving to the login data (contains user data, auth and expiration)
  */
 function loginUser(sessionId, loginData) {
 	return new Promise((resolve, reject) => {
@@ -118,7 +119,7 @@ function doLogin(sessionId) {
 }
 
 /**
- * Function called after the cookies are set
+ * Function called after the user is logged in (if they want to)
  * Reload the current tab to take the changes into account
  */
 function reloadTab() {
