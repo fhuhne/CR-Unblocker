@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="popup.css" />
 </head>
+
 <body>
-	<div class="top-bar">
-		<p>CR-Unblocker v1.6.0</p>
+	<div class="cr-topbar">
+		<p>CR-Unblocker</p>
 	</div>
-	<button id="open-cr">Open Crunchyroll</button>
-	<hr />
-	<input type="checkbox" id="saveLogin" />
-	<label for="saveLogin">Stay logged in</label>
+	<button class="cr-button bigger" id="open-cr">
+		Open Crunchyroll
+		<svg viewbox="0 0 798 1024" xmlns="http://www.w3.org/2000/svg">
+		  <path d="M640 768H128V257.9l128-1.9V128H0v768h768V576H640v192zM384 128l128 128-192 192 128 128 192-192 128 128V128H384z"/>
+		</svg>
+	</button>
+	<hr>
+	<input type="checkbox" id="saveLogin" class="cr-checkbox" />
+	<label for="saveLogin">Save login credentials</label>
+	<button class="cr-button" id="deleteData">Delete login data</button>
+	<div class="cr-footerbar">
+		<p>v1.6.0</p>
+	</div>
 	<script type="text/javascript" src="popup.js"></script>
-	<button id="deleteData">Delete login data</button>
 </body>
+
 </html>

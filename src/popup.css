@@ -1,25 +1,68 @@
 body {
-	font-family: sans-serif;
-	width: 150px;
-	margin: 0;
-	font-size: 15px;
+  font-family: sans-serif;
+  width: 200px;
+  margin: 0;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
-.top-bar {
-	padding: 2px 0;
-	display: block;
-	text-align: center;
-	background-color: #333;
+hr {
+  margin: 1rem 3px;
+  border: dashed 1px rgba(85, 85, 85, 0.46);
 }
 
-.top-bar p {
-	margin: 0;
-	font-size: 13px;
-	color: #ddd;
+.bigger {
+  font-size: 1.2rem;
 }
 
-button {
-	display: block;
-	margin: 5px auto;
-	text-align: center;
+.cr-topbar {
+  font-size: 1.3rem;
+  padding: 8px 0;
+  display: block;
+  color: white;
+  background-color: #f78c25;
+}
+
+.cr-footerbar {
+  font-size: 0.7rem;
+  padding: 8px 0;
+  display: block;
+  color: white;
+  background-color: #777;
+}
+
+.cr-topbar p {
+  margin: 3px;
+  font-weight: bold;
+}
+
+.cr-footerbar p {
+  margin: 0;
+}
+
+.cr-checkbox {
+  border: solid 1px #f78c25;
+  font-size: 1rem;
+}
+
+.cr-button {
+  font-size: 1rem;
+  color: white;
+  min-width: 80%;
+	cursor: pointer;
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f38022;
+  text-align: center;
+}
+
+.cr-button svg {
+  width: 1rem;
+  height: 1rem;
+  fill: white;
+  vertical-align: text-top;
+  margin: 0 0 0 5px;
 }

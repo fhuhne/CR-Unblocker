@@ -26,6 +26,12 @@ function localizeToUs(extension) {
 	});
 }
 
+/**
+ * Fetch in order an array of servers URLs
+ * @param  {Array} urls      URLs to fetch in order
+ * @param  {String} extension Extension of the current domain
+ * @param  {String} auth      Auth token to login user
+ */
 function sequentialFetch(urls, extension, auth) {
 	fetchServer(urls[0] + auth)
 		.then(sessionData => updateCookies(extension, sessionData))
