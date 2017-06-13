@@ -8,9 +8,9 @@
     "test": "echo '=> TESTS' && npm run -s lint",
     "prebuild": "npm run -s test && npm run -s clean",
     "lint": "npm run -s lint:js && npm run -s lint:html && npm run -s lint:css",
-    "lint:js": "echo '-> linting js' && eslint -c test/.eslintrc.json src/*.js",
+    "lint:js": "echo '-> linting js' && eslint src/*.js",
     "lint:html": "echo '-> linting html' && htmllint --rc test/.htmllintrc src/*.html",
-    "lint:css": "echo '-> linting css' && stylelint --config test/.stylelintrc.json src/*.css",
+    "lint:css": "echo '-> linting css' && stylelint src/*.css",
     "build": "echo '=> BUILD' && npm run -s build:zip",
     "build:zip": "echo '-> building for chrome and firefox stores' && cd src; zip -0r ../public/extension.zip ./*; cd ..",
     "watch": "watch 'npm run -s build' src/"
@@ -25,5 +25,8 @@
   },
   "stylelint": {
     "extends": "./test/.stylelintrc.json"
+  },
+  "eslintConfig": {
+    "extends": "./test/.eslintrc.json"
   }
 }
