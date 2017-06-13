@@ -7,18 +7,20 @@
     "clean": "echo '=> CLEANING' && rm -rf public && mkdir public",
     "test": "echo '=> TESTS' && npm run -s lint",
     "prebuild": "npm run -s test && npm run -s clean",
-
-    "lint": "npm run -s lint:js",
-    "lint:js": "echo '-> linting js' && eslint -c .eslintrc.json src/*.js",
-
+    "lint": "npm run -s lint:js && npm run -s lint:html && npm run -s lint:css",
+    "lint:js": "echo '-> linting js' && eslint -c test/.eslintrc.json src/*.js",
+    "lint:html": "echo '-> linting html' && htmllint --rc test/.htmllintrc src/*.html",
+    "lint:css": "echo '-> linting css' && stylelint --config test/.stylelintrc src/*.css",
     "build": "echo '=> BUILD' && npm run -s build:zip",
     "build:zip": "echo '-> building for chrome and firefox stores' && cd src; zip -0r ../public/extension.zip ./*; cd ..",
-
     "watch": "watch 'npm run -s build' src/"
   },
   "author": "Onestay",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "^3.15.0"
+    "eslint": "^3.15.0",
+    "htmllint-cli": "0.0.6",
+    "stylelint": "^7.11.0",
+    "stylelint-config-standard": "^16.0.0"
   }
 }

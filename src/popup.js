@@ -5,7 +5,7 @@ document.getElementById('open-cr').addEventListener('click', () => {
 	browser.tabs.create({	url: 'http://crunchyroll.com/videos/anime/'	});
 });
 
-document.getElementById('saveLogin').addEventListener('change', (ev) => {
+document.getElementById('save-login').addEventListener('change', (ev) => {
 	browser.storage.local.set({ saveLogin: ev.target.checked });
 	if (!ev.target.checked) {
 		browser.storage.local.remove(['loginData', 'login']);
@@ -13,9 +13,9 @@ document.getElementById('saveLogin').addEventListener('change', (ev) => {
 });
 
 browser.storage.local.get({ saveLogin: false }, (item) => {
-	document.getElementById('saveLogin').checked = item.saveLogin;
+	document.getElementById('save-login').checked = item.saveLogin;
 });
 
-document.getElementById('deleteData').addEventListener('click', () => {
+document.getElementById('delete-data').addEventListener('click', () => {
 	browser.storage.local.remove(['loginData', 'login']);
 });
