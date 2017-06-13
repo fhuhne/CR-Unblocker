@@ -10,8 +10,6 @@ var browser = browser || chrome;
 function isUs() {
 	let usRegExp = new RegExp('United States of America');
 	let location = document.getElementById('footer_country_flag');
-	// Escape if no flag
-	if (!location) return false;
 	return !!usRegExp.test(location.alt);
 }
 
@@ -54,7 +52,7 @@ if (isLoginPage()) {
 			});
 		}
 	});
-} else if (!isUs()) {
+} else if (document.getElementById('footer_country_flag') && !isUs()) {
 	let hostname = window.location.hostname;
 	browser.runtime.sendMessage({	msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
 } else {
