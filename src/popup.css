@@ -1,14 +1,16 @@
 body {
-  font-family: sans-serif;
   width: 200px;
   margin: 0;
   font-size: 0.9rem;
   text-align: center;
+  color: white;
+  background-color: #f78c25;
+  font-family: 'Montserrat', sans-serif;
 }
 
 hr {
-  margin: 1rem 3px;
-  border: dashed 1px rgba(85, 85, 85, 0.46);
+  margin: 0 3px 1rem;
+  border: solid 1px rgba(255, 255, 255, 0.2);
 }
 
 .bigger {
@@ -16,11 +18,8 @@ hr {
 }
 
 .cr-topbar {
-  font-size: 1.3rem;
   padding: 8px 0;
   display: block;
-  color: white;
-  background-color: #f78c25;
 }
 
 .cr-footerbar {
@@ -28,12 +27,14 @@ hr {
   padding: 8px 0;
   display: block;
   color: white;
-  background-color: #777;
+  background-color: #dc7c20;
 }
 
 .cr-topbar p {
-  margin: 3px;
+  font-size: 1.3rem;
+  margin: 3px 3px 0;
   font-weight: bold;
+  font-family: 'Roboto', sans-serif;
 }
 
 .cr-footerbar p {
@@ -41,28 +42,27 @@ hr {
 }
 
 .cr-checkbox {
-  border: solid 1px #f78c25;
   font-size: 1rem;
 }
 
 .cr-button {
   font-size: 1rem;
-  color: white;
+  color: #f38022;
   min-width: 80%;
   cursor: pointer;
   display: block;
-  margin: 10px auto;
+  margin: 10px auto 15px;
   padding: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #f38022;
+  background-color: white;
   text-align: center;
 }
 
 .cr-button svg {
   width: 1rem;
   height: 1rem;
-  fill: white;
+  fill: #f38022;
   vertical-align: text-top;
   margin: 0 0 0 5px;
 }

@@ -10,6 +10,8 @@ var browser = browser || chrome;
 function isUs() {
 	let usRegExp = new RegExp('United States of America');
 	let location = document.getElementById('footer_country_flag');
+	// Escape if no flag
+	if (!location) return false;
 	return !!usRegExp.test(location.alt);
 }
 
