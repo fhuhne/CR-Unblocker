@@ -79,10 +79,10 @@ hr {
   from {
     background-color: #f38022;
   }
-  25% {
+  15% {
     background-color: #ffb268;
   }
-  75% {
+  85% {
     background-color: #ffb268;
   }
   to {
@@ -94,10 +94,10 @@ hr {
   from {
     opacity: 0;
   }
-  25% {
+  20% {
     opacity: 1;
   }
-  75% {
+  80% {
     opacity: 1;
   }
   to {
