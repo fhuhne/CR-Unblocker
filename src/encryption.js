@@ -19,19 +19,13 @@
 
 		let alg = { name: AlgorithmName, iv: iv };
 		return new Promise((resolve, reject) => {
-			crypto.subtle.importKey('raw', keyBuffer, alg, false, ['encrypt'])
-				.then((cryptoKey) => {
-					crypto.subtle.encrypt(alg, cryptoKey, textBuffer)
-						.then((encrypted) => {
-							resolve({ iv: btoa(String.fromCharCode(...iv)), cipher: btoa(String.fromCharCode(...new Uint8Array(encrypted))) });
-						})
-						.catch((_e) => {
-							reject(_e);
-						});
+			crypto.subtle.digest('SHA-256', keyBuffer)
+				.then(keyHash => crypto.subtle.importKey('raw', keyHash, alg, false, ['encrypt']))
+				.then(cryptoKey => crypto.subtle.encrypt(alg, cryptoKey, textBuffer))
+				.then(encrypted => {
+					resolve({ iv: btoa(String.fromCharCode(...iv)), cipher: btoa(String.fromCharCode(...new Uint8Array(encrypted))) });
 				})
-				.catch((_e) => {
-					reject(_e);
-				});
+				.catch(_e => reject(_e));
 		});
 	}
 
@@ -48,19 +42,13 @@
 
 		let alg = { name: AlgorithmName, iv: iv };
 		return new Promise((resolve, reject) => {
-			crypto.subtle.importKey('raw', keyBuffer, alg, false, ['decrypt'])
-				.then((cryptoKey) => {
-					crypto.subtle.decrypt(alg, cryptoKey, textBuffer)
-						.then((decrypted) => {
-							resolve(new TextDecoder().decode(decrypted));
-						})
-						.catch((_e) => {
-							reject(_e);
-						});
+			crypto.subtle.digest('SHA-256', keyBuffer)
+				.then(keyHash => crypto.subtle.importKey('raw', keyHash, alg, false, ['decrypt']))
+				.then(cryptoKey => crypto.subtle.decrypt(alg, cryptoKey, textBuffer))
+				.then(decrypted => {
+					resolve(new TextDecoder().decode(decrypted));
 				})
-				.catch((_e) => {
-					reject(_e);
-				});
+				.catch(_e => reject(_e));
 		});
 	}
 
