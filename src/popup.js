@@ -20,14 +20,14 @@ function notifyInPopup(message = '') {
  * Open new tab on button click
  */
 document.getElementById('open-cr').addEventListener('click', () => {
-	browser.tabs.create({	url: 'http://crunchyroll.com/videos/anime/'	});
+	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
 });
 
 /**
  * Toggle the credential saving mechanism on checkbox toggle
  */
 document.getElementById('save-login').addEventListener('change', (ev) => {
-	browser.storage.local.set({	saveLogin: ev.target.checked });
+	browser.storage.local.set({ saveLogin: ev.target.checked });
 	if (!ev.target.checked) {
 		browser.storage.local.remove(['loginData', 'login']);
 	}
