@@ -1,4 +1,4 @@
-/* global chrome, window, document */
+/* global chrome, window, document, encrypt */
 var browser = browser || chrome;
 
 // this extension was heavily inspired by https://github.com/jerryteps/Crunchyroll-Unblocker
@@ -43,12 +43,18 @@ if (isLoginPage()) {
 			document.querySelector('#login_form').addEventListener('submit', () => {
 				let username = document.querySelector('#login_form_name').value;
 				let password = document.querySelector('#login_form_password').value;
-				browser.storage.local.set({
-					loginData: {
-						username: username,
-						password: password
-					}
-				});
+				encrypt(username, password)
+					.then(encrypted => {
+						browser.storage.local.set({
+							loginData: {
+								username: username,
+								password: encrypted
+							}
+						});
+					})
+					.catch(_e => {
+						console.log(`Failed to encrypt password: ${_e}`);
+					});
 			});
 		}
 	});

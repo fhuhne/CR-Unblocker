@@ -1,4 +1,4 @@
-/* global fetch, chrome */
+/* global fetch, chrome, decrypt */
 var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
@@ -105,16 +105,28 @@ function updateCookies(extension, sessionData) {
  */
 function loginUser(sessionId, loginData) {
 	return new Promise((resolve, reject) => {
-		fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`)
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.error === true) {
-					reject(new Error(res.message));
-				} else {
-					resolve(res.data);
-				}
-			})
-			.catch((e) => reject(e));
+		if (typeof loginData.password === 'string') {
+			// if the password is decrypted, login using the API
+			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`)
+				.then((res) => res.json())
+				.then((res) => {
+					if (res.error === true) {
+						reject(new Error(res.message));
+					} else {
+						resolve(res.data);
+					}
+				})
+				.catch((e) => reject(e));
+		} else {
+			// password isn't in plain text, decrypt it
+			decrypt(loginData.username, loginData.password)
+				.then(password => {
+					loginUser(sessionId, { username: loginData.username, password: password })
+						.then(data => resolve(data))
+						.catch(_e => reject(_e));
+				})
+				.catch(_e => reject(_e));
+		}
 	});
 }
 

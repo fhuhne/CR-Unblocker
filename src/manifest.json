@@ -23,7 +23,7 @@
 
   "content_scripts": [{
     "matches": ["*://*.crunchyroll.com/*"],
-    "js": ["content.js"]
+    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "content.js"]
   }],
 
   "browser_action": {
@@ -37,7 +37,7 @@
   },
 
   "background": {
-    "scripts": ["background_script.js"],
+    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "background_script.js"],
     "persistent": false
   }
 }
