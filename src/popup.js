@@ -45,5 +45,5 @@ browser.storage.local.get({ saveLogin: false }, (item) => {
  */
 document.getElementById('delete-data').addEventListener('click', () => {
 	browser.storage.local.remove(['loginData', 'login']);
-	notifyInPopup('You data were deleted');
+	notifyInPopup('Your data was deleted');
 });
