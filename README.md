@@ -9,7 +9,7 @@ The method CR-Unblocker are using is basically the one described above. Your ses
 Please note: We are not responsible for any compromised accounts.
 
 ## The extension keep disconnecting me every time, what can I do?
-Click on the extension's icon and check "Save login credentials". The next time you log in, your username and password will be stored locally in encrypted form (on Edge, they are not encrypted, but are erased after after the first login) is available and then used to log you in when switching regions. If the checkbox is not checked, no data will be stored.
+Click on the extension's icon and check "Save login credentials". The next time you log in, your username and password will be stored locally in encrypted form (on Edge, they are not encrypted, but are erased after the first login) is available and then used to log you in when switching regions. If the checkbox is not checked, no data will be stored.
 
 ## Installing
 You can just install the Chrome Extension from [here](https://chrome.google.com/webstore/detail/cr-unblocker/agapeeilkibacbfeijlidlgppmjaaijn) or the Edge Extension from [here](https://www.microsoft.com/store/apps/9PF520KDMZRZ).
