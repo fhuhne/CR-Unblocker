@@ -1,0 +1,10 @@
+{
+	"extends": "stylelint-config-standard",
+	"rules": {
+		"comment-whitespace-inside": null,
+		"rule-empty-line-before": null,
+		"selector-list-comma-newline-after": null,
+		"declaration-empty-line-before": "never",
+		"indentation": "tab"
+	}
+}

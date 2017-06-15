@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>CR Unblocker plugin popup</title>
+	<link rel="stylesheet" href="popup.css" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
+</head>
+
+<body>
+	<div class="cr-topbar">
+		<p>CR-Unblocker</p>
+	</div>
+	<hr>
+	<button class="cr-button bigger" id="open-cr">
+		Open Crunchyroll
+		<svg viewbox="0 0 798 1024" xmlns="http://www.w3.org/2000/svg">
+		  <path d="M640 768H128V257.9l128-1.9V128H0v768h768V576H640v192zM384 128l128 128-192 192 128 128 192-192 128 128V128H384z"/>
+		</svg>
+	</button>
+	<hr>
+	<input type="checkbox" id="save-login" class="cr-checkbox" />
+	<label for="save-login">Save login credentials</label>
+	<button class="cr-button" id="delete-data">Delete login data</button>
+	<div class="cr-footerbar" id="footer">
+		<p>v1.6.0</p>
+	</div>
+	<script type="text/javascript" src="popup.js"></script>
+</body>
+
+</html>

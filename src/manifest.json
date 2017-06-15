@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CR-Unblocker",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "A tool that will set the Crunchyroll Session ID to an American session ID",
   "homepage_url": "https://github.com/Onestay/CR-Unblocker",
   "author": "Onestay",
@@ -17,12 +17,13 @@
     "cookies",
     "notifications",
     "tabs",
+    "storage",
     "*://*.crunchyroll.com/*"
   ],
 
   "content_scripts": [{
     "matches": ["*://*.crunchyroll.com/*"],
-    "js": ["content.js"]
+    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "content.js"]
   }],
 
   "browser_action": {
@@ -30,11 +31,13 @@
       "128": "icons/Crunchyroll-128.png",
       "40": "icons/Crunchyroll-40.png",
       "20": "icons/Crunchyroll-20.png"
-    }
+    },
+    "default_title": "CR-Unblocker",
+    "default_popup": "popup.html"
   },
 
   "background": {
-    "scripts": ["background_script.js"],
+    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "background_script.js"],
     "persistent": false
   }
 }
