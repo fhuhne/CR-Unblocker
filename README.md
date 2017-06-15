@@ -4,17 +4,17 @@
 The CR-Unblocker will get an American Session ID and sets it as your current Session ID cookie. Like this Crunchyroll will think you are located in America and therefore you should have access to all anime you couldn't watch.
 
 ## I've heard it isn't safe?
-The method all Crunchyroll Unblockers are using is basically the same as described above. Your session id is bound to your account after being set as a cookie. However, we take security very seriously. If you notice anything suspicious *PLEASE* tell us.
+The method CR-Unblocker are using is basically the one described above. Your session id is bound to your account after being set as a cookie. However, we take security very seriously. If you notice anything suspicious __PLEASE__ tell us.
 
 Please note: We are not responsible for any compromised accounts.
 
 ## The extension keep disconnecting me every time, what can I do?
-Click on the extension's icon and check "Save login credentials". The next time you log in, your username and password will be stored locally in encrypted form if encryption is available and then used to log you in when switching regions. If the checkbox is not checked, no data will be stored at all.
+Click on the extension's icon and check "Save login credentials". The next time you log in, your username and password will be stored locally in encrypted form (on Edge, they are not encrypted, but are erased after after the first login) is available and then used to log you in when switching regions. If the checkbox is not checked, no data will be stored.
 
 ## Installing
 You can just install the Chrome Extension from [here](https://chrome.google.com/webstore/detail/cr-unblocker/agapeeilkibacbfeijlidlgppmjaaijn) or the Edge Extension from [here](https://www.microsoft.com/store/apps/9PF520KDMZRZ).
 
-Alternatively you can just download the source and package it yourself. The extension is tested in Chrome, Firefox and Edge, but it should also work in all other browsers supporting WebExtensions.
+Alternatively you can just download the source and package it yourself. The extension is tested in Chrome, Firefox and Edge, but it should also work in all other browsers supporting WebExtensions API.
 
 ## Setting the backend up yourself
 Currently there's no custom backend in use, so there's nothing to set up yourself. The extension currently only uses Crunchyroll's own API.
