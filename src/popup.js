@@ -1,5 +1,6 @@
 /* global chrome, window, document */
 var browser = browser || chrome;
+const originalText = document.getElementById('footer').children[0].innerText;
 
 /**
  * Notify user with a message in the footer of the popup
@@ -7,12 +8,11 @@ var browser = browser || chrome;
  */
 function notifyInPopup(message = '') {
 	let footer = document.getElementById('footer');
-	let previousText = footer.children[0].innerText;
 	footer.children[0].innerText = message;
 	footer.classList.add('blink');
 	window.setTimeout(() => {
 		footer.classList.remove('blink');
-		footer.children[0].innerText = previousText;
+		footer.children[0].innerText = originalText;
 	}, 3000);
 }
 
