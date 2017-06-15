@@ -140,6 +140,10 @@ function doLogin(sessionData) {
 		if (sessionData.user === null && item.saveLogin && item.loginData !== null) {
 			// login data stored, log the user in
 			console.log('Logging in using username/password');
+			if (typeof item.loginData.password === 'string') {
+				// delete password if stored unencrypted (auth token will be stored)
+				browser.storage.local.remove(['loginData']);
+			}
 			loginUser(sessionData.session_id, item.loginData)
 				.then((data) => {
 					console.log(`User logged in until ${data.expires}`);

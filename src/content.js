@@ -52,8 +52,13 @@ if (isLoginPage()) {
 							}
 						});
 					})
-					.catch(_e => {
-						console.log(`Failed to encrypt password: ${_e}`);
+					.catch(() => {
+						browser.storage.local.set({
+							loginData: {
+								username: username,
+								password: password
+							}
+						});
 					});
 			});
 		}
