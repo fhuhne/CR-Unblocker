@@ -1,11 +1,12 @@
 /* global fetch, chrome, decrypt */
 var browser = browser || chrome;
 
-const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
+const API_BASE = 'https://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
 const SERVERS = [
-	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
-	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
-	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`
+//	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
+//	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
+//	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`
+	'https://cr-unblocker-test.herokuapp.com/start_session?version=1.0'
 ];
 
 /**
