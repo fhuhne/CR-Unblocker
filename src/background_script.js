@@ -14,8 +14,7 @@ const SERVERS = [
  * @param {String} extension extension of domain
  */
 function localizeToUs(extension) {
-	console.log('Setting cookie...');
-	console.log('Trying to fetch main server...');
+	console.log('Fetching session id...');
 	SERVERS.shuffle();
 	browser.storage.local.get({ saveLogin: false, login: null }, (item) => {
 		var auth = '';
@@ -34,14 +33,15 @@ function localizeToUs(extension) {
  * @param  {String} auth      Auth token to login user
  */
 function sequentialFetch(urls, extension, auth) {
+	console.log(`Fetching server ${urls[0]}...`);
 	fetchServer(urls[0] + auth)
 		.then(sessionData => updateCookies(extension, sessionData))
 		.catch(e => {
+			console.log(e);
 			if (urls.slice(1).length > 0) {
-				sequentialFetch(urls.slice(1), extension);
+				sequentialFetch(urls.slice(1), extension, auth);
 			} else {
-				notifyUser(`Main server and backup server couldn't get a session id`);
-				console.log(e);
+				notifyUser(`CR-Unblocker couldn't get a session id`);
 			}
 		});
 }
