@@ -19,7 +19,7 @@
     "tabs",
     "storage",
     "*://*.crunchyroll.com/*",
-    "*://cr-unblocker-test.herokuapp.com/*"
+    "*://crunblocker.onestay.moe/*"
   ],
 
   "content_scripts": [{
