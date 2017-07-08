@@ -207,7 +207,7 @@ browser.runtime.onMessage.addListener((message) => {
 /**
  * Add a method to shuffle arrays randomly
  */
-Array.prototype.shuffle = () => {
+Array.prototype.shuffle = function shuffle() {
 	var swapIndex, tempElement;
 	for (var i = this.length; i; i--) {
 		swapIndex = Math.floor(Math.random() * i);
