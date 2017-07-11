@@ -6,7 +6,8 @@ const SERVERS = [
 	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
 	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
 	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`,
-	'https://crunblocker.onestay.moe/start_session?version=1.0'
+	'https://api1.cr-unblocker.com/getsession.php?version=1.0',
+	'https://api2.cr-unblocker.com/start_session?version=1.0'
 ];
 
 /**
