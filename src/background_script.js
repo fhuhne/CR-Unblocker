@@ -5,7 +5,9 @@ const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&
 const SERVERS = [
 	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
 	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
-	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`
+	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`,
+	'https://api1.cr-unblocker.com/getsession.php?version=1.0',
+	'https://api2.cr-unblocker.com/start_session?version=1.0'
 ];
 
 /**
@@ -13,8 +15,7 @@ const SERVERS = [
  * @param {String} extension extension of domain
  */
 function localizeToUs(extension) {
-	console.log('Setting cookie...');
-	console.log('Trying to fetch main server...');
+	console.log('Fetching session id...');
 	SERVERS.shuffle();
 	browser.storage.local.get({ saveLogin: false, login: null }, (item) => {
 		var auth = '';
@@ -33,14 +34,15 @@ function localizeToUs(extension) {
  * @param  {String} auth      Auth token to login user
  */
 function sequentialFetch(urls, extension, auth) {
+	console.log(`Fetching server ${urls[0]}...`);
 	fetchServer(urls[0] + auth)
 		.then(sessionData => updateCookies(extension, sessionData))
 		.catch(e => {
+			console.log(e);
 			if (urls.slice(1).length > 0) {
-				sequentialFetch(urls.slice(1), extension);
+				sequentialFetch(urls.slice(1), extension, auth);
 			} else {
-				notifyUser(`Main server and backup server couldn't get a session id`);
-				console.log(e);
+				notifyUser(`CR-Unblocker couldn't get a session id`);
 			}
 		});
 }
@@ -206,7 +208,7 @@ browser.runtime.onMessage.addListener((message) => {
 /**
  * Add a method to shuffle arrays randomly
  */
-Array.prototype.shuffle = () => {
+Array.prototype.shuffle = function shuffle() {
 	var swapIndex, tempElement;
 	for (var i = this.length; i; i--) {
 		swapIndex = Math.floor(Math.random() * i);

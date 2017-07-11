@@ -18,7 +18,8 @@
     "notifications",
     "tabs",
     "storage",
-    "*://*.crunchyroll.com/*"
+    "*://*.crunchyroll.com/*",
+    "*://*.cr-unblocker.com/*"
   ],
 
   "content_scripts": [{
