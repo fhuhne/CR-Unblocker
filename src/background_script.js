@@ -209,7 +209,7 @@ browser.runtime.onMessage.addListener((message) => {
  *  Open the changelog page after update or installation
  */
 browser.runtime.onInstalled.addListener(() => {
-	browser.tabs.create({ url: 'https://onestay.github.io/CR-Unblocker/' });
+	browser.tabs.create({ url: 'https://cr-unblocker.com' });
 });
 
 /**
