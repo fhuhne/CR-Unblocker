@@ -16,7 +16,6 @@
 		"activeTab",
     "cookies",
     "notifications",
-    "tabs",
     "storage",
     "*://*.crunchyroll.com/*",
     "*://*.cr-unblocker.com/*"
