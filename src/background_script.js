@@ -149,8 +149,8 @@ function doLogin(sessionData) {
 			loginUser(sessionData.session_id, item.loginData)
 				.then((data) => {
 					console.log(`User logged in until ${data.expires}`);
-					// store auth and expiration, then reload
-					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires } }, reloadTab);
+					// store auth, expiration and userId, then reload
+					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires }, user: { userId: data.user.user_id } }, reloadTab);
 				})
 				.catch((_e) => {
 					notifyUser('Failed to login, please log in manually.');
