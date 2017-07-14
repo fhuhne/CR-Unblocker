@@ -3,11 +3,11 @@ var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
 const SERVERS = [
-	`${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`,
-	`${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`,
-	`${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`,
-	'https://api1.cr-unblocker.com/getsession.php?version=1.0',
-	'https://api2.cr-unblocker.com/start_session?version=1.0'
+	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false },
+	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false },
+	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false },
+	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
+	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true }
 ];
 
 /**
@@ -17,30 +17,31 @@ const SERVERS = [
 function localizeToUs(extension) {
 	console.log('Fetching session id...');
 	SERVERS.shuffle();
-	browser.storage.local.get({ saveLogin: false, login: null }, (item) => {
+	browser.storage.local.get({ saveLogin: false, login: null, user: null }, (item) => {
 		var auth = '';
 		if (item.saveLogin && item.login !== null) {
 			console.log('Logging in using auth token...');
 			auth = `&auth=${encodeURIComponent(item.login.auth)}`;
 		}
-		sequentialFetch(SERVERS, extension, auth);
+		sequentialFetch(SERVERS, extension, auth, item.user);
 	});
 }
 
 /**
  * Fetch in order an array of servers URLs
- * @param  {Array} urls      URLs to fetch in order
+ * @param  {Array} servers      Servers to fetch in order
  * @param  {String} extension Extension of the current domain
  * @param  {String} auth      Auth token to login user
+ * @param  {Object} user User data for the user to log in
  */
-function sequentialFetch(urls, extension, auth) {
-	console.log(`Fetching server ${urls[0]}...`);
-	fetchServer(urls[0] + auth)
+function sequentialFetch(servers, extension, auth, user) {
+	console.log(`Fetching server ${servers[0].url}...`);
+	fetchServer(servers[0], auth, user)
 		.then(sessionData => updateCookies(extension, sessionData))
 		.catch(e => {
 			console.log(e);
-			if (urls.slice(1).length > 0) {
-				sequentialFetch(urls.slice(1), extension, auth);
+			if (servers.slice(1).length > 0) {
+				sequentialFetch(servers.slice(1), extension, auth, user);
 			} else {
 				notifyUser(`CR-Unblocker couldn't get a session id`);
 			}
@@ -49,11 +50,17 @@ function sequentialFetch(urls, extension, auth) {
 
 /**
  * Fetch a session ID from a server
- * @param  {String} uri URL of the backend server
+ * @param  {Object} server Object describing backend server to use
+ * @param  {String} auth      Auth token to login user
+ * @param  {Object} user User data for the user to log in
  * @return {Promise}     A promise resolving to the the session data containing session id and possibly user/auth data
  */
-function fetchServer(uri) {
+function fetchServer(server, auth, user) {
 	return new Promise((resolve, reject) => {
+		let uri = server.url + auth;
+		if (server.sendUserId && user !== null && user.userId !== null && auth !== '') {
+			uri += `&user_id=${encodeURIComponent(user.userId)}`;
+		}
 		fetch(uri)
 			.then(res => {
 				if (res.ok) {
