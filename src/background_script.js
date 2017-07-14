@@ -3,11 +3,12 @@ var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
 const SERVERS = [
-	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false },
-	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
-	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true }
+//	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false },
+//	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false },
+//	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false },
+//	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
+//	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true }
+	{ url: 'https://cr-unblocker-test.herokuapp.com/start_session?version=1.1', sendUserId: true }
 ];
 
 /**
