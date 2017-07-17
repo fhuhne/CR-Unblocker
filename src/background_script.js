@@ -1,11 +1,11 @@
 /* global fetch, chrome, decrypt */
 var browser = browser || chrome;
 
-const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?device_id=a&api_ver=1.0';
+const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?api_ver=1.0';
 const SERVERS = [
-	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false },
+	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false, generateDeviceId: true },
+	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false, generateDeviceId: true },
+	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false, generateDeviceId: true },
 	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
 	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true }
 ];
@@ -60,6 +60,9 @@ function fetchServer(server, auth, user) {
 		let uri = server.url + auth;
 		if (server.sendUserId && user !== null && user.userId !== null && auth !== '') {
 			uri += `&user_id=${encodeURIComponent(user.userId)}`;
+		}
+		if (server.generateDeviceId) {
+			uri += `&device_id=${generateDeviceId()}`;
 		}
 		fetch(uri)
 			.then(res => {
@@ -231,3 +234,16 @@ Array.prototype.shuffle = function shuffle() {
 		this[swapIndex] = tempElement;
 	}
 };
+
+/**
+ * Generate a random 32 character long device ID
+ * @return {String} Generated device ID
+ */
+function generateDeviceId() {
+	let id = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (var i = 0; i < 32; i++) {
+		id += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return id;
+}
