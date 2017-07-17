@@ -18,8 +18,7 @@
     "notifications",
     "storage",
     "*://*.crunchyroll.com/*",
-    "*://*.cr-unblocker.com/*",
-    "*://cr-unblocker-test.herokuapp.com/*"
+    "*://*.cr-unblocker.com/*"
   ],
 
   "content_scripts": [{
