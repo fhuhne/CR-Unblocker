@@ -68,4 +68,11 @@ if (isLoginPage()) {
 	browser.runtime.sendMessage({	msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
 } else {
 	console.log('You are already registered in the US.');
+	// delete login data when user logs out
+	document.querySelectorAll('a[href$="/logout"]').forEach((a) => {
+		console.log(a);
+		a.addEventListener('click', () => {
+			browser.storage.local.remove(['login', 'user', 'loginData']);
+		});
+	});
 }
