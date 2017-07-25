@@ -29,7 +29,7 @@ document.getElementById('open-cr').addEventListener('click', () => {
 document.getElementById('save-login').addEventListener('change', (ev) => {
 	browser.storage.local.set({ saveLogin: ev.target.checked });
 	if (!ev.target.checked) {
-		browser.storage.local.remove(['loginData', 'login']);
+		browser.storage.local.remove(['loginData', 'login', 'user']);
 	}
 });
 
@@ -44,6 +44,6 @@ browser.storage.local.get({ saveLogin: false }, (item) => {
  * Delete data on button click
  */
 document.getElementById('delete-data').addEventListener('click', () => {
-	browser.storage.local.remove(['loginData', 'login']);
+	browser.storage.local.remove(['loginData', 'login', 'user']);
 	notifyInPopup('Your data was deleted');
 });
