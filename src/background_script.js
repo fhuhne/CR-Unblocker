@@ -1,4 +1,4 @@
-/* global fetch, chrome, decrypt, settings */
+/* global fetch, chrome, decrypt */
 var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?api_ver=1.0';
