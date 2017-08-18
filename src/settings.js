@@ -7,7 +7,7 @@ var browser = browser || chrome;
  */
 ((global) => {
 	// Settings object with default settings
-	let settings = { saveLogin: false };
+	let settings = { saveLogin: false, switchRegion: true };
 	let validSettings = Object.keys(settings);
 
 	/**

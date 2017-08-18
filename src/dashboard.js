@@ -23,11 +23,28 @@ for (let i = 0; i < tabLinks.length; i++) {
 }
 
 /**
- * Toggle the credential saving mechanism on checkbox toggle
+ * Adds event listener for checkbox that saves a settings value
+ * @param {String}   id       ID of checkbox and name of setting
+ * @param {Function} callback Optional callback to call with new state of setting
  */
-document.getElementById('save-login').addEventListener('change', (ev) => {
-	browser.runtime.sendMessage({ action: 'saveSettings', settings: { saveLogin: ev.target.checked } });
-	if (!ev.target.checked) {
+function addSettingCheckbox(id, callback) {
+	document.getElementById(id).addEventListener('change', (ev) => {
+		let settings = {};
+		settings[id] = ev.target.checked;
+		browser.runtime.sendMessage({ action: 'saveSettings', settings: settings });
+		if (typeof callback === 'function') {
+			// eslint-disable-next-line callback-return
+			callback(ev.target.checked);
+		}
+	});
+}
+
+/**
+ * Save checkbox states
+ */
+addSettingCheckbox('switchRegion');
+addSettingCheckbox('saveLogin', (checked) => {
+	if (!checked) {
 		browser.storage.local.remove(['loginData', 'login', 'user']);
 	}
 });
@@ -37,7 +54,8 @@ document.getElementById('save-login').addEventListener('change', (ev) => {
  * @param  {Object} settings Settings to display
  */
 function displaySettings(settings) {
-	document.getElementById('save-login').checked = settings.saveLogin;
+	document.getElementById('saveLogin').checked = settings.saveLogin;
+	document.getElementById('switchRegion').checked = settings.switchRegion;
 }
 
 /**
