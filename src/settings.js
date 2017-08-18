@@ -18,8 +18,15 @@ var browser = browser || chrome;
 			// Merge saved settings with default settings overwriting the default ones
 			settings = Object.assign(settings, item.settings);
 		} else {
-			// Save default settings
-			browser.storage.local.set({ settings: settings });
+			browser.storage.local.get({ saveLogin: null }, (saveLogin) => {
+				// Migrate from old version
+				if (saveLogin.saveLogin !== null) {
+					settings.saveLogin = saveLogin.saveLogin;
+					browser.storage.local.remove(['saveLogin']);
+				}
+				// Save default settings
+				browser.storage.local.set({ settings: settings });
+			});
 		}
 	});
 
