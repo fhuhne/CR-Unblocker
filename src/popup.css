@@ -59,14 +59,6 @@ hr {
 	text-align: center;
 }
 
-.cr-button svg {
-	width: 1rem;
-	height: 1rem;
-	fill: #f38022;
-	vertical-align: text-top;
-	margin: 0 0 0 5px;
-}
-
 .blink {
 	animation: blink-animation 3s alternate both ease-in-out;
 }
