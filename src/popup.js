@@ -24,6 +24,13 @@ document.getElementById('open-cr').addEventListener('click', () => {
 });
 
 /**
+ * Open dashboard on button click
+ */
+document.getElementById('open-dashboard').addEventListener('click', () => {
+	browser.tabs.create({ url: browser.extension.getURL('dashboard.html') });
+});
+
+/**
  * Toggle the credential saving mechanism on checkbox toggle
  */
 document.getElementById('save-login').addEventListener('change', (ev) => {

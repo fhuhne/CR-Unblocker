@@ -1,0 +1,57 @@
+body {
+	font-family: 'Montserrat', sans-serif;
+}
+
+.tabs {
+	padding: 0 0 0 10px;
+	margin: 0;
+	border-bottom: 1px solid #666;
+}
+.tabs::after {
+	display: block;
+	clear: both;
+	content: '';
+}
+.tabs li {
+	list-style: none;
+	margin: 0 5px;
+	float: left;
+	position: relative;
+	bottom: -1px;
+}
+.tabs li p {
+	margin: 0;
+}
+.tabs li a {
+	text-decoration: none;
+	color: black;
+	padding: 5px 15px;
+	margin-top: 8px;
+	border-radius: 3px 3px 0 0;
+	border: 1px solid #666;
+	display: inline-block;
+}
+.tabs li a:hover, .tabs li.active a {
+	border-bottom: 1px solid white;
+	padding: 9px 15px;
+	margin-top: 0;
+}
+
+.tab-content {
+	padding: 15px;
+}
+.tab {
+	display: none;
+}
+.tab.active {
+	display: block;
+}
+.tabs li p.brand {
+	margin-top: 4px;
+	padding: 5px 15px;
+	font-size: 1.2rem;
+	font-family: 'Roboto', sans-serif;
+}
+.tabs li p.brand span {
+	font-size: 0.8rem;
+}
