@@ -1,6 +1,9 @@
 /* global chrome, window, document */
 var browser = browser || chrome;
 
+/**
+ * Tab menu
+ */
 let tabLinks = document.querySelectorAll('.tabs li a');
 let tabParent = document.querySelector('.tab-content');
 for (let i = 0; i < tabLinks.length; i++) {
@@ -18,3 +21,42 @@ for (let i = 0; i < tabLinks.length; i++) {
 		tab.className = 'tab active';
 	});
 }
+
+/**
+ * Toggle the credential saving mechanism on checkbox toggle
+ */
+document.getElementById('save-login').addEventListener('change', (ev) => {
+	browser.runtime.sendMessage({ action: 'saveSettings', settings: { saveLogin: ev.target.checked } });
+	if (!ev.target.checked) {
+		browser.storage.local.remove(['loginData', 'login', 'user']);
+	}
+});
+
+/**
+ * Display settings in DOM
+ * @param  {Object} settings Settings to display
+ */
+function displaySettings(settings) {
+	document.getElementById('save-login').checked = settings.saveLogin;
+}
+
+/**
+ * Display settings on load
+ */
+browser.runtime.sendMessage({ action: 'getSettings' }, displaySettings);
+
+/**
+ * Listen for settings update messages
+ */
+browser.runtime.onMessage.addListener((message) => {
+	if (message.event === 'settingsChanged') {
+		displaySettings(message.settings);
+	}
+});
+
+/**
+ * Delete data on button click
+ */
+document.getElementById('delete-data').addEventListener('click', () => {
+	browser.storage.local.remove(['loginData', 'login', 'user']);
+});

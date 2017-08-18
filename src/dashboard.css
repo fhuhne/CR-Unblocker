@@ -46,12 +46,32 @@ body {
 .tab.active {
 	display: block;
 }
+.brand {
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.2rem;
+}
 .tabs li p.brand {
 	margin-top: 4px;
 	padding: 5px 15px;
-	font-size: 1.2rem;
-	font-family: 'Roboto', sans-serif;
 }
 .tabs li p.brand span {
 	font-size: 0.8rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: lighter;
+	font-family: 'Roboto', sans-serif;
+}
+.tab :first-child {
+	margin-top: 0;
+}
+
+.cr-button {
+	cursor: pointer;
+	display: block;
+	padding: 10px;
+	margin: 10px 0 15px;
+	border-radius: 5px;
+	border: none;
+	font-size: 1rem;
 }

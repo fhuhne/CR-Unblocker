@@ -34,17 +34,17 @@ document.getElementById('open-dashboard').addEventListener('click', () => {
  * Toggle the credential saving mechanism on checkbox toggle
  */
 document.getElementById('save-login').addEventListener('change', (ev) => {
-	browser.storage.local.set({ saveLogin: ev.target.checked });
+	browser.runtime.sendMessage({ action: 'saveSettings', settings: { saveLogin: ev.target.checked } });
 	if (!ev.target.checked) {
 		browser.storage.local.remove(['loginData', 'login', 'user']);
 	}
 });
 
 /**
- * Display saved state of credentials saving mechanism in DOM
+ * Display settings in DOM
  */
-browser.storage.local.get({ saveLogin: false }, (item) => {
-	document.getElementById('save-login').checked = item.saveLogin;
+browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
+	document.getElementById('save-login').checked = settings.saveLogin;
 });
 
 /**

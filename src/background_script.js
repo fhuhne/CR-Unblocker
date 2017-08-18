@@ -1,4 +1,4 @@
-/* global fetch, chrome, decrypt */
+/* global fetch, chrome, decrypt, settings */
 var browser = browser || chrome;
 
 const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?api_ver=1.0';
@@ -17,9 +17,10 @@ const SERVERS = [
 function localizeToUs(extension) {
 	console.log('Fetching session id...');
 	SERVERS.shuffle();
-	browser.storage.local.get({ saveLogin: false, login: null, user: null }, (item) => {
+	let settings = this.settings.get();
+	browser.storage.local.get({ login: null, user: null }, (item) => {
 		var auth = '';
-		if (item.saveLogin && item.login !== null) {
+		if (settings.saveLogin && item.login !== null) {
 			console.log('Logging in using auth token...');
 			auth = `&auth=${encodeURIComponent(item.login.auth)}`;
 		}
@@ -148,8 +149,9 @@ function loginUser(sessionId, loginData) {
  * @param {Object} sessionData current session data
  */
 function doLogin(sessionData) {
-	browser.storage.local.get({ saveLogin: false, loginData: null }, (item) => {
-		if (sessionData.user === null && item.saveLogin && item.loginData !== null) {
+	let settings = this.settings.get();
+	browser.storage.local.get({ loginData: null }, (item) => {
+		if (sessionData.user === null && settings.saveLogin && item.loginData !== null) {
 			// login data stored, log the user in
 			console.log('Logging in using username/password');
 			if (typeof item.loginData.password === 'string') {
@@ -167,7 +169,7 @@ function doLogin(sessionData) {
 					console.log(_e);
 					reloadTab();
 				});
-		} else if (sessionData.user !== null && item.saveLogin) {
+		} else if (sessionData.user !== null && settings.saveLogin) {
 			// user was already logged in when starting the session, store the new auth and expiration
 			console.log(`Logged in until ${sessionData.expires}`);
 			browser.storage.local.set({ login: { auth: sessionData.auth, expiration: sessionData.expires } }, reloadTab);
@@ -190,7 +192,7 @@ function reloadTab() {
 	}, tabs => {
 		tabs.forEach(tab => {
 			console.log('Reload tab via content script');
-			browser.tabs.sendMessage(tab.id, { msg: 'reload' });
+			browser.tabs.sendMessage(tab.id, { action: 'reload' });
 		});
 	});
 }
@@ -212,7 +214,9 @@ function notifyUser(msg) {
  *  Set a cookie with the extension transmitted from the content script
  */
 browser.runtime.onMessage.addListener((message) => {
-	localizeToUs(message.msg);
+	if (message.action === 'localizeToUs') {
+		localizeToUs(message.extension);
+	}
 });
 
 /**
