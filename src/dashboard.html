@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>CR Unblocker Dashboard</title>
+	<link rel="stylesheet" href="dashboard.css" />
+	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
+</head>
+
+<body>
+	<div class="tab-area">
+		<ul class="tabs">
+			<li><p class="brand">CR-Unblocker <span>v2.1.0</span></p></li>
+			<li class="active"><a href="#tab-settings">Settings</a></li>
+			<li><a href="#tab-about">About</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab active" id="tab-settings">
+				<h2>Settings</h2>
+				<input type="checkbox" id="switchRegion" class="cr-checkbox" />
+				<label for="switchRegion">Switch region on Crunchyroll</label><br />
+				<input type="checkbox" id="saveLogin" class="cr-checkbox" />
+				<label for="saveLogin">Save login credentials</label>
+				<button class="cr-button" id="delete-data">Delete login data</button>
+			</div>
+			<div class="tab" id="tab-about">
+				<h2>About</h2>
+				<ul>
+					<li><a target="_blank" href="https://cr-unblocker.com/">Changelog</a></li>
+					<li><a target="_blank" href="https://github.com/Onestay/CR-Unblocker">Source code</a></li>
+					<li>Uses <a target="_blank" href="http://fontawesome.io/">Font Awesome</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+body {
+	font-family: 'Montserrat', sans-serif;
+}
+
+.tabs {
+	padding: 0 0 0 10px;
+	margin: 0;
+	border-bottom: 1px solid #666;
+}
+.tabs::after {
+	display: block;
+	clear: both;
+	content: '';
+}
+.tabs li {
+	list-style: none;
+	margin: 0 5px;
+	float: left;
+	position: relative;
+	bottom: -1px;
+}
+.tabs li p {
+	margin: 0;
+}
+.tabs li a {
+	text-decoration: none;
+	color: black;
+	padding: 5px 15px;
+	margin-top: 8px;
+	border-radius: 3px 3px 0 0;
+	border: 1px solid #666;
+	display: inline-block;
+}
+.tabs li a:hover, .tabs li.active a {
+	border-bottom: 1px solid white;
+	padding: 9px 15px;
+	margin-top: 0;
+}
+
+.tab-content {
+	padding: 15px;
+}
+.tab {
+	display: none;
+}
+.tab.active {
+	display: block;
+}
+.brand {
+	font-family: 'Roboto', sans-serif;
+	font-size: 1.2rem;
+}
+.tabs li p.brand {
+	margin-top: 4px;
+	padding: 5px 15px;
+}
+.tabs li p.brand span {
+	font-size: 0.8rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: lighter;
+	font-family: 'Roboto', sans-serif;
+}
+.tab :first-child {
+	margin-top: 0;
+}
+
+.cr-button {
+	cursor: pointer;
+	display: block;
+	padding: 10px;
+	margin: 10px 0 15px;
+	border-radius: 5px;
+	border: none;
+	font-size: 1rem;
+}

@@ -37,7 +37,11 @@
   },
 
   "background": {
-    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "background_script.js"],
+    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "settings.js", "background_script.js"],
     "persistent": false
-  }
+},
+
+"options_ui": {
+	"page": "dashboard.html"
+}
 }

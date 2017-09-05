@@ -25,8 +25,8 @@ function isLoginPage() {
 * Listen for messages and reload the page when asked by the background script
 */
 browser.runtime.onMessage.addListener((message) => {
-	console.log('Reloading to apply new cookies');
-	if (message.msg === 'reload') {
+	if (message.action === 'reload') {
+		console.log('Reloading to apply new cookies');
 		location.reload(true);
 	}
 });
@@ -36,9 +36,9 @@ browser.runtime.onMessage.addListener((message) => {
  * It will ask the background script to get a new cookie if it is not located
  * in the US
  */
-if (isLoginPage()) {
-	browser.storage.local.get({ saveLogin: false }, (item) => {
-		if (item.saveLogin) {
+browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
+	if (isLoginPage()) {
+		if (settings.saveLogin) {
 			// login data should be saved --> add event handler to form submit that stores username and password in local storage
 			document.querySelector('#login_form').addEventListener('submit', () => {
 				let username = document.querySelector('#login_form_name').value;
@@ -62,17 +62,19 @@ if (isLoginPage()) {
 					});
 			});
 		}
-	});
-} else if (document.getElementById('footer_country_flag') && !isUs()) {
-	let hostname = window.location.hostname;
-	browser.runtime.sendMessage({	msg: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
-} else {
-	console.log('You are already registered in the US.');
-	// delete login data when user logs out
-	document.querySelectorAll('a[href$="/logout"]').forEach((a) => {
-		console.log(a);
-		a.addEventListener('click', () => {
-			browser.storage.local.remove(['login', 'user', 'loginData']);
+	} else if (document.getElementById('footer_country_flag') && !isUs()) {
+		if (settings.switchRegion) {
+			let hostname = window.location.hostname;
+			browser.runtime.sendMessage({ action: 'localizeToUs', extension: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
+		}
+	} else {
+		console.log('You are already registered in the US.');
+		// delete login data when user logs out
+		document.querySelectorAll('a[href$="/logout"]').forEach((a) => {
+			console.log(a);
+			a.addEventListener('click', () => {
+				browser.storage.local.remove(['login', 'user', 'loginData']);
+			});
 		});
-	});
-}
+	}
+});
