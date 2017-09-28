@@ -223,8 +223,8 @@ browser.runtime.onMessage.addListener((message) => {
  *  Open the changelog page after update or installation
  */
 browser.runtime.onInstalled.addListener((detail) => {
-	if (detail.reason === 'install' && details.reason === 'update') {
-		browser.tabs.create({ url: 'https://cr-unblocker.com' });		
+	if (detail.reason === 'install' || detail.reason === 'update') {
+		browser.tabs.create({ url: 'https://cr-unblocker.com' });
 	}
 });
 
