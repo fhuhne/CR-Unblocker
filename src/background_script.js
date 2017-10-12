@@ -102,11 +102,19 @@ function updateCookies(extension, sessionData) {
 	}, () => {
 		browser.cookies.set({
 			url: `http://crunchyroll${extension}`,
-			name: 'c_locale',
-			value: 'enUS',
+			name: 'sess_id',
+			value: sessionData.session_id,
 			domain: `crunchyroll${extension}`,
 			httpOnly: true
-		}, () => doLogin(sessionData));
+		}, () => {
+			browser.cookies.set({
+				url: `http://crunchyroll${extension}`,
+				name: 'c_locale',
+				value: 'enUS',
+				domain: `crunchyroll${extension}`,
+				httpOnly: true
+			}, () => doLogin(sessionData));
+		});
 	});
 }
 
