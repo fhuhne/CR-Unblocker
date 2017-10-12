@@ -1,6 +1,7 @@
 /node_modules
 /public
 .tern-project
+src.zip
 extension.zip
 extension.crx
 extension.pem
