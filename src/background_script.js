@@ -95,7 +95,7 @@ function updateCookies(extension, sessionData) {
 	console.log(`got session id. Setting cookie ${sessionData.session_id}.`);
 	browser.cookies.set({
 		url: `http://crunchyroll${extension}`,
-		name: 'sess_id',
+		name: 'session_id',
 		value: sessionData.session_id,
 		domain: `crunchyroll${extension}`,
 		httpOnly: true
