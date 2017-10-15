@@ -9,6 +9,7 @@
   "attr-name-style": false,
   "attr-req-value": false,
   "tag-bans": ["b", "i"],
-  "id-class-style": "dash",
-  "img-req-alt": "allownull"
+  "id-class-style": false,
+  "img-req-alt": "allownull",
+  "line-end-style": false
 }
