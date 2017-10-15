@@ -12,7 +12,7 @@ Please note: We are not responsible for any compromised accounts.
 Click on the extension's icon and check "Save login credentials". The next time you log in, your username and password will be stored locally in encrypted form (on Edge, they are not encrypted, but are erased after the first login) and then used to log you in when switching regions. If the checkbox is not checked, no data will be stored.
 
 ## Installing
-You can just install the Chrome Extension from [here](https://chrome.google.com/webstore/detail/cr-unblocker/agapeeilkibacbfeijlidlgppmjaaijn) or the Edge Extension from [here](https://www.microsoft.com/store/apps/9PF520KDMZRZ).
+You can just install the Chrome Extension from [here](https://chrome.google.com/webstore/detail/cr-unblocker/agapeeilkibacbfeijlidlgppmjaaijn), the Edge Extension from [here](https://www.microsoft.com/store/apps/9PF520KDMZRZ) and the Firefox Extension from [here](https://addons.mozilla.org/firefox/addon/crunchy-unblocker).
 
 Alternatively you can just download the source and package it yourself. The extension is tested in Chrome, Firefox and Edge, but it should also work in all other browsers supporting WebExtensions API.
 
