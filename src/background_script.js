@@ -1,13 +1,10 @@
 /* global fetch, chrome, decrypt */
 var browser = browser || chrome;
 
-const API_BASE = 'http://api-manga.crunchyroll.com/cr_start_session?api_ver=1.0';
 const SERVERS = [
-	{ url: `${API_BASE}&device_type=com.crunchyroll.manga.android&access_token=FLpcfZH4CbW4muO`, sendUserId: false, generateDeviceId: true },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.iphone&access_token=QWjz212GspMHH9h`, sendUserId: false, generateDeviceId: true },
-	{ url: `${API_BASE}&device_type=com.crunchyroll.windows.desktop&access_token=LNDJgOit5yaRIWN`, sendUserId: false, generateDeviceId: true },
 	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
-	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true }
+	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true },
+	{ url: 'https://cr-unblocker.us.to/start_session?version=1.1', sendUserId: true }
 ];
 
 /**
@@ -232,7 +229,7 @@ browser.runtime.onMessage.addListener((message) => {
  */
 browser.runtime.onInstalled.addListener((detail) => {
 	if (detail.reason === 'install' || detail.reason === 'update') {
-		browser.tabs.create({ url: 'https://cr-unblocker.com' });
+		browser.tabs.create({ url: 'https://cr-unblocker.us.to' });
 	}
 });
 
