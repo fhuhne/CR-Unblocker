@@ -18,6 +18,14 @@ Unfortunately the Chrome and Edge Stores have removed the unblocker from their s
 
 Alternatively you can just download the source and package it yourself. The extension is tested in Firefox, but it should also work in all other browsers supporting WebExtensions API.
 
+## Building
+
+To pack the extension for the extension store you need to follow these steps (on linux, windows may be different):
+
+```bash
+npm run-script build
+```
+
 ## Setting the backend up yourself
 If you are really concerned about security you can run it yourself. Up to date instructions can be found in the backend repo.
 

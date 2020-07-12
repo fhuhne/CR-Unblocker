@@ -10,43 +10,18 @@ const SERVERS = [
  * @param {String} extension extension of domain
  * @param {boolean} loggedIn login status of user
  */
-function localizeToUs(extension, loggedIn) {
-	// if (!loggedIn) {
-		console.log('Fetching session id.')
-		SERVERS.shuffle()
-		let settings = this.settings.get()
-		browser.storage.local.get({ login: null, user: null }, (item) => {
-			var auth = ''
-			if (settings.saveLogin && item.login !== null) {
-				console.log('Logging in using auth token.')
-				auth = `&auth=${encodeURIComponent(item.login.auth)}`
-			}
-			sequentialFetch(SERVERS, extension, auth, item.user)
-		});
-	// } else {
-	// 	browser.cookies.get({
-	// 		url: `https://www.crunchyroll.com`,
-	// 		name: "cru_notif"
-	// 	}).then(notifyLogin)
-	// }
-}
-
-/**
- *
- * @param {Cookie} cookie cookie to check for user notification
- */
-function notifyLogin(cookie) {
-	if (cookie == null) {
-		console.log('setting cookie')
-		notifyUser("Due to problems switching regions is not supported while logged in.")
-		browser.cookies.set({
-			url: `https://www.crunchyroll.com`,
-			name: 'cru_notif',
-			value: 'notified',
-			domain: `crunchyroll.com`,
-			httpOnly: true
-		})
-	}
+function localizeToUs(extension) {
+	console.log('Fetching session id.')
+	SERVERS.shuffle()
+	let settings = this.settings.get()
+	browser.storage.local.get({ login: null, user: null }, (item) => {
+		var auth = ''
+		if (settings.saveLogin && item.login !== null) {
+			console.log('Logging in using auth token.')
+			auth = `&auth=${encodeURIComponent(item.login.auth)}`
+		}
+		sequentialFetch(SERVERS, extension, auth, item.user)
+	});
 }
 
 /**
@@ -142,7 +117,7 @@ function loginUser(sessionId, loginData) {
 	return new Promise((resolve, reject) => {
 		if (typeof loginData.password === 'string') {
 			// if the password is decrypted, login using the API
-			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`, {method:'POST'})
+			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`, { method: 'POST' })
 				.then((res) => res.json())
 				.then((res) => {
 					if (res.error === true) {

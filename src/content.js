@@ -23,7 +23,7 @@ function isLoginPage() {
  * Check if the user is logged in
  */
 function isLoggedIn() {
-	return document.querySelectorAll('[token="login_top"]').length == 0;
+	return document.querySelectorAll('[token="login_top"]').length === 0;
 }
 
 /**
