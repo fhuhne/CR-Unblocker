@@ -142,7 +142,7 @@ function loginUser(sessionId, loginData) {
 	return new Promise((resolve, reject) => {
 		if (typeof loginData.password === 'string') {
 			// if the password is decrypted, login using the API
-			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`)
+			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`, {method:'POST'})
 				.then((res) => res.json())
 				.then((res) => {
 					if (res.error === true) {
