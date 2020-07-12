@@ -1,28 +1,52 @@
 /* global fetch, chrome, decrypt */
-var browser = browser || chrome;
+var browser = browser || chrome
 
 const SERVERS = [
-	{ url: 'https://api1.cr-unblocker.com/getsession.php?version=1.1', sendUserId: true },
-	{ url: 'https://api2.cr-unblocker.com/start_session?version=1.1', sendUserId: true },
 	{ url: 'https://cr-unblocker.us.to/start_session?version=1.1', sendUserId: true }
-];
+]
 
 /**
  * Main function fetching and setting the US based cookies
  * @param {String} extension extension of domain
+ * @param {boolean} loggedIn login status of user
  */
-function localizeToUs(extension) {
-	console.log('Fetching session id...');
-	SERVERS.shuffle();
-	let settings = this.settings.get();
-	browser.storage.local.get({ login: null, user: null }, (item) => {
-		var auth = '';
-		if (settings.saveLogin && item.login !== null) {
-			console.log('Logging in using auth token...');
-			auth = `&auth=${encodeURIComponent(item.login.auth)}`;
-		}
-		sequentialFetch(SERVERS, extension, auth, item.user);
-	});
+function localizeToUs(extension, loggedIn) {
+	// if (!loggedIn) {
+		console.log('Fetching session id.')
+		SERVERS.shuffle()
+		let settings = this.settings.get()
+		browser.storage.local.get({ login: null, user: null }, (item) => {
+			var auth = ''
+			if (settings.saveLogin && item.login !== null) {
+				console.log('Logging in using auth token.')
+				auth = `&auth=${encodeURIComponent(item.login.auth)}`
+			}
+			sequentialFetch(SERVERS, extension, auth, item.user)
+		});
+	// } else {
+	// 	browser.cookies.get({
+	// 		url: `https://www.crunchyroll.com`,
+	// 		name: "cru_notif"
+	// 	}).then(notifyLogin)
+	// }
+}
+
+/**
+ *
+ * @param {Cookie} cookie cookie to check for user notification
+ */
+function notifyLogin(cookie) {
+	if (cookie == null) {
+		console.log('setting cookie')
+		notifyUser("Due to problems switching regions is not supported while logged in.")
+		browser.cookies.set({
+			url: `https://www.crunchyroll.com`,
+			name: 'cru_notif',
+			value: 'notified',
+			domain: `crunchyroll.com`,
+			httpOnly: true
+		})
+	}
 }
 
 /**
@@ -33,17 +57,17 @@ function localizeToUs(extension) {
  * @param  {Object} user User data for the user to log in
  */
 function sequentialFetch(servers, extension, auth, user) {
-	console.log(`Fetching server ${servers[0].url}...`);
+	console.log(`Fetching server ${servers[0].url}`)
 	fetchServer(servers[0], auth, user)
 		.then(sessionData => updateCookies(extension, sessionData))
 		.catch(e => {
 			console.log(e);
 			if (servers.slice(1).length > 0) {
-				sequentialFetch(servers.slice(1), extension, auth, user);
+				sequentialFetch(servers.slice(1), extension, auth, user)
 			} else {
-				notifyUser(`CR-Unblocker couldn't get a session id`);
+				notifyUser(`CR-Unblocker couldn't get a session id`)
 			}
-		});
+		})
 }
 
 /**
@@ -55,30 +79,31 @@ function sequentialFetch(servers, extension, auth, user) {
  */
 function fetchServer(server, auth, user) {
 	return new Promise((resolve, reject) => {
-		let uri = server.url + auth;
+		let uri = server.url + auth
 		if (server.sendUserId && user !== null && user.userId !== null && auth !== '') {
-			uri += `&user_id=${encodeURIComponent(user.userId)}`;
+			console.log('sendUserId')
+			uri += `&user_id=${encodeURIComponent(user.userId)}`
 		}
 		if (server.generateDeviceId) {
-			uri += `&device_id=${generateDeviceId()}`;
+			uri += `&device_id=${generateDeviceId()}`
 		}
 		fetch(uri)
 			.then(res => {
 				if (res.ok) {
-					return res.json();
+					return res.json()
 				}
-				reject(new Error(res.status));
+				reject(new Error(res.status))
 			})
 			.then(json => {
 				if (json.error === true) {
-					reject(new Error(json.message));
+					reject(new Error(json.message))
 				} else if (json.data.country_code !== 'US') {
-					reject(new Error('Session id not from the US'));
+					reject(new Error('Session id not from the US'))
 				} else {
-					resolve(json.data);
+					resolve(json.data)
 				}
 			})
-			.catch((e) => reject(e));
+			.catch((e) => reject(e))
 	});
 }
 
@@ -89,7 +114,7 @@ function fetchServer(server, auth, user) {
  * @param {Object} sessionData  New session data
  */
 function updateCookies(extension, sessionData) {
-	console.log(`got session id. Setting cookie ${sessionData.session_id}.`);
+	console.log(`got session id. Setting cookie ${sessionData.session_id}.`)
 	browser.cookies.set({
 		url: `http://crunchyroll${extension}`,
 		name: 'session_id',
@@ -99,20 +124,12 @@ function updateCookies(extension, sessionData) {
 	}, () => {
 		browser.cookies.set({
 			url: `http://crunchyroll${extension}`,
-			name: 'sess_id',
-			value: sessionData.session_id,
+			name: 'c_locale',
+			value: 'enUS',
 			domain: `crunchyroll${extension}`,
 			httpOnly: true
-		}, () => {
-			browser.cookies.set({
-				url: `http://crunchyroll${extension}`,
-				name: 'c_locale',
-				value: 'enUS',
-				domain: `crunchyroll${extension}`,
-				httpOnly: true
-			}, () => doLogin(sessionData));
-		});
-	});
+		}, () => doLogin(sessionData));
+	})
 }
 
 /**
@@ -129,21 +146,21 @@ function loginUser(sessionId, loginData) {
 				.then((res) => res.json())
 				.then((res) => {
 					if (res.error === true) {
-						reject(new Error(res.message));
+						reject(new Error(res.message))
 					} else {
-						resolve(res.data);
+						resolve(res.data)
 					}
 				})
-				.catch((e) => reject(e));
+				.catch((e) => reject(e))
 		} else {
 			// password isn't in plain text, decrypt it
 			decrypt(loginData.username, loginData.password)
 				.then(password => {
 					loginUser(sessionId, { username: loginData.username, password: password })
 						.then(data => resolve(data))
-						.catch(_e => reject(_e));
+						.catch(_e => reject(_e))
 				})
-				.catch(_e => reject(_e));
+				.catch(_e => reject(_e))
 		}
 	});
 }
@@ -154,35 +171,35 @@ function loginUser(sessionId, loginData) {
  * @param {Object} sessionData current session data
  */
 function doLogin(sessionData) {
-	let settings = this.settings.get();
+	let settings = this.settings.get()
 	browser.storage.local.get({ loginData: null }, (item) => {
 		if (sessionData.user === null && settings.saveLogin && item.loginData !== null) {
 			// login data stored, log the user in
-			console.log('Logging in using username/password');
+			console.log('Logging in using username/password')
 			if (typeof item.loginData.password === 'string') {
 				// delete password if stored unencrypted (auth token will be stored)
-				browser.storage.local.remove(['loginData']);
+				browser.storage.local.remove(['loginData'])
 			}
 			loginUser(sessionData.session_id, item.loginData)
 				.then((data) => {
 					console.log(`User logged in until ${data.expires}`);
 					// store auth, expiration and userId, then reload
-					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires }, user: { userId: data.user.user_id } }, reloadTab);
+					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires }, user: { userId: data.user.user_id } }, reloadTab)
 				})
 				.catch((_e) => {
-					notifyUser('Failed to login, please log in manually.');
-					console.log(_e);
-					reloadTab();
+					notifyUser('Failed to login, please log in manually.')
+					console.log(_e)
+					reloadTab()
 				});
 		} else if (sessionData.user !== null && settings.saveLogin) {
 			// user was already logged in when starting the session, store the new auth and expiration
-			console.log(`Logged in until ${sessionData.expires}`);
-			browser.storage.local.set({ login: { auth: sessionData.auth, expiration: sessionData.expires } }, reloadTab);
+			console.log(`Logged in until ${sessionData.expires}`)
+			browser.storage.local.set({ login: { auth: sessionData.auth, expiration: sessionData.expires } }, reloadTab)
 		} else {
 			// no need to login, reload immediately
-			reloadTab();
+			reloadTab()
 		}
-	});
+	})
 }
 
 /**
@@ -190,16 +207,16 @@ function doLogin(sessionData) {
  * Reload the current tab to take the changes into account
  */
 function reloadTab() {
-	console.log('Done!');
+	console.log('Done!')
 	browser.tabs.query({
 		currentWindow: true,
 		active: true
 	}, tabs => {
 		tabs.forEach(tab => {
-			console.log('Reload tab via content script');
-			browser.tabs.sendMessage(tab.id, { action: 'reload' });
-		});
-	});
+			console.log('Reload tab via content script')
+			browser.tabs.sendMessage(tab.id, { action: 'reload' })
+		})
+	})
 }
 
 /**
@@ -212,7 +229,7 @@ function notifyUser(msg) {
 		iconUrl: 'icons/Crunchyroll-128.png',
 		title: 'CR-Unblocker has encountered an error',
 		message: msg
-	});
+	})
 }
 
 /**
@@ -220,31 +237,31 @@ function notifyUser(msg) {
  */
 browser.runtime.onMessage.addListener((message) => {
 	if (message.action === 'localizeToUs') {
-		localizeToUs(message.extension);
+		localizeToUs(message.extension, message.loggedIn)
 	}
-});
+})
 
 /**
  *  Open the changelog page after update or installation
  */
 browser.runtime.onInstalled.addListener((detail) => {
 	if (detail.reason === 'install' || detail.reason === 'update') {
-		browser.tabs.create({ url: 'https://cr-unblocker.us.to' });
+		browser.tabs.create({ url: 'https://cr-unblocker.us.to' })
 	}
-});
+})
 
 /**
  * Add a method to shuffle arrays randomly
  */
 Array.prototype.shuffle = function shuffle() {
-	var swapIndex, tempElement;
+	var swapIndex, tempElement
 	for (var i = this.length; i; i--) {
-		swapIndex = Math.floor(Math.random() * i);
-		tempElement = this[i - 1];
-		this[i - 1] = this[swapIndex];
-		this[swapIndex] = tempElement;
+		swapIndex = Math.floor(Math.random() * i)
+		tempElement = this[i - 1]
+		this[i - 1] = this[swapIndex]
+		this[swapIndex] = tempElement
 	}
-};
+}
 
 /**
  * Generate a random 32 character long device ID
@@ -252,9 +269,9 @@ Array.prototype.shuffle = function shuffle() {
  */
 function generateDeviceId() {
 	let id = '';
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 	for (var i = 0; i < 32; i++) {
-		id += possible.charAt(Math.floor(Math.random() * possible.length));
+		id += possible.charAt(Math.floor(Math.random() * possible.length))
 	}
-	return id;
+	return id
 }

@@ -1,34 +1,37 @@
 <!DOCTYPE html>
-
 <html>
+	<head>
+		<meta charset="utf-8" />
+		<title>CR Unblocker plugin popup</title>
+		<link rel="stylesheet" href="popup.css" />
+		<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="cr-topbar">
+			<p>CR-Unblocker</p>
+		</div>
 
-<head>
-	<meta charset="utf-8" />
-	<title>CR Unblocker plugin popup</title>
-	<link rel="stylesheet" href="popup.css" />
-	<link href="https://fonts.googleapis.com/css?family=Montserrat|Roboto" rel="stylesheet">
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-</head>
+		<hr>
 
-<body>
-	<div class="cr-topbar">
-		<p>CR-Unblocker</p>
-	</div>
-	<hr>
-	<button class="cr-button bigger" id="open-cr">
-		Open Crunchyroll <span class="fa fa-external-link"></span>
-	</button>
-	<button class="cr-button bigger" id="open-dashboard">
-		Settings <span class="fa fa-cog"></span>
-	</button>
-	<hr>
-	<input type="checkbox" id="save-login" class="cr-checkbox" />
-	<label for="save-login">Save login credentials</label>
-	<button class="cr-button" id="delete-data">Delete login data</button>
-	<div class="cr-footerbar" id="footer">
-		<p>v2.2.2c</p>
-	</div>
-	<script type="text/javascript" src="popup.js"></script>
-</body>
+		<button class="cr-button bigger" id="open-cr">
+			Open Crunchyroll <span class="fa fa-external-link"></span>
+		</button>
+		<button class="cr-button bigger" id="open-dashboard">
+			Settings <span class="fa fa-cog"></span>
+		</button>
 
+		<hr>
+
+		<p>
+			<input type="checkbox" id="switchRegion" class="cr-checkbox" />
+			<label for="switchRegion">Enable region switch</label>
+		</p>
+
+		<div class="cr-footerbar" id="footer">
+			<p>v2.2.4</p>
+		</div>
+
+		<script type="text/javascript" src="popup.js"></script>
+	</body>
 </html>

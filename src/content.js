@@ -1,8 +1,6 @@
 /* global chrome, window, document, encrypt */
 var browser = browser || chrome;
 
-// this extension was heavily inspired by https://github.com/jerryteps/Crunchyroll-Unblocker
-
 /**
  * Check if the current CR page is located in the US
  * @return {Boolean} true if currently in the US
@@ -19,6 +17,13 @@ function isUs() {
  */
 function isLoginPage() {
 	return window.location.pathname.startsWith('/login');
+}
+
+/**
+ * Check if the user is logged in
+ */
+function isLoggedIn() {
+	return document.querySelectorAll('[token="login_top"]').length == 0;
 }
 
 /**
@@ -65,7 +70,7 @@ browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	} else if (document.getElementById('footer_country_flag') && !isUs()) {
 		if (settings.switchRegion) {
 			let hostname = window.location.hostname;
-			browser.runtime.sendMessage({ action: 'localizeToUs', extension: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length) });
+			browser.runtime.sendMessage({ action: 'localizeToUs', extension: hostname.slice(hostname.indexOf('crunchyroll.') + 11, hostname.length), loggedIn: isLoggedIn() });
 		}
 	} else {
 		console.log('You are already registered in the US.');

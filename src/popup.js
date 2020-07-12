@@ -30,27 +30,32 @@ document.getElementById('open-dashboard').addEventListener('click', () => {
 	browser.tabs.create({ url: browser.extension.getURL('dashboard.html') });
 });
 
+
 /**
- * Toggle the credential saving mechanism on checkbox toggle
+ * Adds event listener for checkbox that saves a settings value
+ * @param {String}   id       ID of checkbox and name of setting
+ * @param {Function} callback Optional callback to call with new state of setting
  */
-document.getElementById('save-login').addEventListener('change', (ev) => {
-	browser.runtime.sendMessage({ action: 'saveSettings', settings: { saveLogin: ev.target.checked } });
-	if (!ev.target.checked) {
-		browser.storage.local.remove(['loginData', 'login', 'user']);
-	}
-});
+function addSettingCheckbox(id, callback) {
+	document.getElementById(id).addEventListener('change', (ev) => {
+		let settings = {};
+		settings[id] = ev.target.checked;
+		browser.runtime.sendMessage({ action: 'saveSettings', settings: settings });
+		if (typeof callback === 'function') {
+			// eslint-disable-next-line callback-return
+			callback(ev.target.checked);
+		}
+	});
+}
+
+/**
+ * Save checkbox states
+ */
+addSettingCheckbox('switchRegion');
 
 /**
  * Display settings in DOM
  */
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
-	document.getElementById('save-login').checked = settings.saveLogin;
-});
-
-/**
- * Delete data on button click
- */
-document.getElementById('delete-data').addEventListener('click', () => {
-	browser.storage.local.remove(['loginData', 'login', 'user']);
-	notifyInPopup('Your data was deleted');
+	document.getElementById('switchRegion').checked = settings.switchRegion;
 });
