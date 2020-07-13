@@ -19,11 +19,11 @@ function resetLastUnblock() {
  * @param {boolean} loggedIn login status of user
  */
 function localizeToUs(extension) {
-	var last_unblock = localStorage.getItem('last_unblock')
+	var lastUnblock = localStorage.getItem('last_unblock')
 
-	if (last_unblock && last_unblock > (new Date().getTime())) {
-		console.log("Not fetching session id, last try less than a minute ago.")
-		console.log("Remaining: " + (last_unblock - (new Date().getTime())) / 1000 + "s")
+	if (lastUnblock && lastUnblock > new Date().getTime()) {
+		console.log('Not fetching session id, last try less than a minute ago.')
+		console.log(`Remaining: ${((lastUnblock - new Date().getTime()) / 1000)} seconds`)
 		return
 	}
 
@@ -39,7 +39,7 @@ function localizeToUs(extension) {
 		try {
 			sequentialFetch(SERVERS, extension, auth, item.user)
 		} finally {
-			localStorage.setItem('last_unblock', (new Date(new Date().getTime() + (60 * 1000)).getTime()))
+			localStorage.setItem('last_unblock', new Date(new Date().getTime() + (60 * 1000)).getTime())
 		}
 	});
 }
