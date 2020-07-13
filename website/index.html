@@ -9,8 +9,13 @@
             <h2>Download</h2>
             <p>Firefox Users can get the extension <a href="https://addons.mozilla.org/de/firefox/addon/crunchy-unblocker/">here</a>.</p>
             <h2>Known Issues</h2>
-            <p>Lately Crunchyroll seems to check the session on every page load for logged in users. Sorry, nothing I can do at this point. <b>You can still watch the free stuff with a one week delay without being logged in</b>. If anyone has a solution that does not include using a full time VPN, contact me.</p>
+            <p style="font-weight:bold;color:red;">Sometimes the extension is stuck in a reload loop. Please try this if that happens: log out on crunchyroll, clear the login data in the extension and then try to login again.</p>
             <h2>Changelog</h2>
+            <h3>2.3.1</h3>
+            <p>Most issues seem to be errors getting new sessions. I think this is largely related to the reload loop. To improve on this I implemented a timer to only reload once a minute - if the session can not be obtained, it is unlikely to work a few seconds after.</p>
+            <ul>
+                <li>Added timer between session reloads</li>
+            </ul>
             <h3>2.3</h3>
             <p>Good news: unblocking while logged in is back!</p>
             <p>Some of you have hinted me a way but I could not replicate it for some reason. Thanks for telling me, and sorry for not getting this working sooner :)</p>

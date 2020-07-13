@@ -6,11 +6,27 @@ const SERVERS = [
 ]
 
 /**
+ * Resets the timer, e.g. when on the login page
+ */
+function resetLastUnblock() {
+	console.log('removing timer')
+	localStorage.removeItem('last_unblock')
+}
+
+/**
  * Main function fetching and setting the US based cookies
  * @param {String} extension extension of domain
  * @param {boolean} loggedIn login status of user
  */
 function localizeToUs(extension) {
+	var last_unblock = localStorage.getItem('last_unblock')
+
+	if (last_unblock && last_unblock > (new Date().getTime())) {
+		console.log("Not fetching session id, last try less than a minute ago.")
+		console.log("Remaining: " + (last_unblock - (new Date().getTime())) / 1000 + "s")
+		return
+	}
+
 	console.log('Fetching session id.')
 	SERVERS.shuffle()
 	let settings = this.settings.get()
@@ -20,7 +36,11 @@ function localizeToUs(extension) {
 			console.log('Logging in using auth token.')
 			auth = `&auth=${encodeURIComponent(item.login.auth)}`
 		}
-		sequentialFetch(SERVERS, extension, auth, item.user)
+		try {
+			sequentialFetch(SERVERS, extension, auth, item.user)
+		} finally {
+			localStorage.setItem('last_unblock', (new Date(new Date().getTime() + (60 * 1000)).getTime()))
+		}
 	});
 }
 
@@ -40,7 +60,7 @@ function sequentialFetch(servers, extension, auth, user) {
 			if (servers.slice(1).length > 0) {
 				sequentialFetch(servers.slice(1), extension, auth, user)
 			} else {
-				notifyUser(`CR-Unblocker couldn't get a session id`)
+				notifyUser(`CR-Unblocker couldn't get a session id. Delaying retry for a minute ...`)
 			}
 		})
 }
@@ -208,11 +228,16 @@ function notifyUser(msg) {
 }
 
 /**
- *  Set a cookie with the extension transmitted from the content script
+ *  Add content script listener
  */
 browser.runtime.onMessage.addListener((message) => {
-	if (message.action === 'localizeToUs') {
-		localizeToUs(message.extension, message.loggedIn)
+	switch (message.action) {
+		case 'localizeToUs':
+			localizeToUs(message.extension, message.loggedIn)
+			break
+		case 'resetLastUnblock':
+			resetLastUnblock()
+			break
 	}
 })
 

@@ -43,6 +43,7 @@ browser.runtime.onMessage.addListener((message) => {
  */
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	if (isLoginPage()) {
+		browser.runtime.sendMessage({ action: 'resetLastUnblock' });
 		if (settings.saveLogin) {
 			// login data should be saved --> add event handler to form submit that stores username and password in local storage
 			document.querySelector('#login_form').addEventListener('submit', () => {
