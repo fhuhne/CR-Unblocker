@@ -1,11 +1,10 @@
 {
   "manifest_version": 2,
   "name": "CR-Unblocker",
-  "version": "2.3.1",
-  "description": "A tool that will set the Crunchyroll Session ID to an American session ID",
+  "version": "3.0.0",
+  "description": "A tool that will proxy the Crunchyroll Session ID through a US server.",
   "homepage_url": "https://cr-unblocker.us.to/ ",
   "author": "Finn",
-
   "icons": {
     "128": "icons/Crunchyroll-128.png",
     "48": "icons/Crunchyroll-48.png",
@@ -18,7 +17,9 @@
     "notifications",
     "storage",
     "*://*.crunchyroll.com/*",
-    "*://*.cr-unblocker.us.to/*"
+    "*://*.cr-unblocker.us.to/*",
+    "webRequest",
+    "proxy"
   ],
 
   "content_scripts": [{
