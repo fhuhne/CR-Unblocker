@@ -1,6 +1,6 @@
 {
   "name": "cr_unblocker",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "build:zip": "echo '-> building for chrome and firefox stores' && cd src; zip -0r ../public/extension.zip ./*; cd ..",
     "watch": "watch 'npm run -s build' src/"
   },
-  "author": "Onestay",
+  "author": "Finn",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^3.15.0",

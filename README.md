@@ -1,10 +1,9 @@
-# CR-Unblocker
+# CR-Unblocker 3.0
 
-## What is the CR-Unblocker?
-The CR-Unblocker will get an American Session ID and sets it as your current Session ID cookie. Like this Crunchyroll will think you are located in America and therefore you should have access to all anime you couldn't watch.
+CR-Unblocker helps accessing region locked anime on Crunchyroll without the need for a VPN. This extension will only proxy the request to obtain the session token but not other traffic. This way the site stays fast and responsive!
 
 ## I've heard it isn't safe?
-The method CR-Unblocker are using is basically the one described above. Your session id is bound to your account after being set as a cookie. However, we take security very seriously. If you notice anything suspicious __PLEASE__ tell us.
+The method CR-Unblocker is using is basically the one described above. Your session id is bound to your account after being set. However, we take security very seriously. If you notice anything suspicious __PLEASE__ tell us.
 
 Please note: We are not responsible for any compromised accounts.
 
