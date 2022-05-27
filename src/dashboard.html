@@ -17,10 +17,29 @@
 				<div class="tab active" id="tab-settings">
 					<h2>Settings</h2>
 					<input type="checkbox" id="switchRegion" class="cr-checkbox" />
-					<label for="switchRegion">Switch region on Crunchyroll</label><br />
-					<input type="checkbox" id="saveLogin" class="cr-checkbox" />
-					<label for="saveLogin">Save login credentials</label>
-					<button class="cr-button" id="delete-data">Delete login data</button>
+					<label for="switchRegion">Switch region on Crunchyroll</label>
+					<h2>SOCKS configuration</h2>
+					<input type="checkbox" id="socks_custom" class="cr-checkbox" />
+					<label for="socks_custom">Use custom proxy</label>
+					<table>
+						<tr>
+							<td><label for="socks_host">Host</label></td>
+							<td><input type="text" id="socks_host"></td>
+						</tr>
+						<tr>
+							<td><label for="socks_port">Port</label></td>
+							<td><input type="text" id="socks_port"></td>
+						</tr>
+						<tr>
+							<td><label for="socks_user">Username</label></td>
+							<td><input type="text" id="socks_user"></td>
+						</tr>
+						<tr>
+							<td><label for="socks_pass">Password</label></td>
+							<td><input type="text" id="socks_pass"></td>
+						</tr>
+					</table>
+					<br>
 				</div>
 				<div class="tab" id="tab-about">
 					<h2>About</h2>

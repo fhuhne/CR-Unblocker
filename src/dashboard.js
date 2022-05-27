@@ -40,22 +40,43 @@ function addSettingCheckbox(id, callback) {
 }
 
 /**
- * Save checkbox states
+ * Adds event listener for inputs that saves a settings value
+ * @param {String}   id       ID of checkbox and name of setting
+ * @param {Function} callback Optional callback to call with new state of setting
+ */
+function addSettingInput(id, callback) {
+	document.getElementById(id).addEventListener('change', (ev) => {
+		let settings = {};
+		settings[id] = ev.target.value;
+		browser.runtime.sendMessage({ action: 'saveSettings', settings: settings });
+		if (typeof callback === 'function') {
+			// eslint-disable-next-line callback-return
+			callback(ev.target.value);
+		}
+	});
+}
+
+/**
+ * Save states
  */
 addSettingCheckbox('switchRegion');
-addSettingCheckbox('saveLogin', (checked) => {
-	if (!checked) {
-		browser.storage.local.remove(['loginData', 'login', 'user']);
-	}
-});
+addSettingCheckbox('socks_custom');
+addSettingInput('socks_host');
+addSettingInput('socks_port');
+addSettingInput('socks_user');
+addSettingInput('socks_pass');
 
 /**
  * Display settings in DOM
  * @param  {Object} settings Settings to display
  */
 function displaySettings(settings) {
-	document.getElementById('saveLogin').checked = settings.saveLogin;
 	document.getElementById('switchRegion').checked = settings.switchRegion;
+	document.getElementById('socks_custom').value = settings.socks_custom;
+	document.getElementById('socks_host').value = settings.socks_host;
+	document.getElementById('socks_port').value = settings.socks_port;
+	document.getElementById('socks_user').value = settings.socks_user;
+	document.getElementById('socks_pass').value = settings.socks_pass;
 }
 
 /**

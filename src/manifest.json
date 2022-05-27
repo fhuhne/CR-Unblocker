@@ -23,8 +23,8 @@
   ],
 
   "content_scripts": [{
-    "matches": ["*://*.crunchyroll.com/*"],
-    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "content.js"]
+    "matches": ["*://www.crunchyroll.com/*"],
+    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "content.js"]
   }],
 
   "browser_action": {
@@ -38,7 +38,13 @@
   },
 
   "background": {
-    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "settings.js", "background_script.js"]
+    "scripts": [
+      "vendor/encoding-indexes.js",
+      "vendor/encoding.js",
+      "settings.js",
+      "background_script.js",
+      "background.js"
+    ]
   },
 
   "options_ui": {

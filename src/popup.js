@@ -5,7 +5,7 @@ var browser = browser || chrome;
  * Open new tab on button click
  */
 document.getElementById('open-cr').addEventListener('click', () => {
-	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+	browser.tabs.create({ url: 'http://crunchyroll.com/' });
 });
 
 /**

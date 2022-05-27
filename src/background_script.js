@@ -123,8 +123,9 @@ function updateCookies(extension, sessionData) {
 			value: 'enUS',
 			domain: `crunchyroll${extension}`,
 			httpOnly: true
-		}, () => doLogin(sessionData));
+		})
 	})
+	reloadTab()
 }
 
 /**
@@ -158,43 +159,6 @@ function loginUser(sessionId, loginData) {
 				.catch(_e => reject(_e))
 		}
 	});
-}
-
-/**
- * Function called after the cookies are set
- * Login user if needed
- * @param {Object} sessionData current session data
- */
-function doLogin(sessionData) {
-	let settings = this.settings.get()
-	browser.storage.local.get({ loginData: null }, (item) => {
-		if (sessionData.user === null && settings.saveLogin && item.loginData !== null) {
-			// login data stored, log the user in
-			console.log('Logging in using username/password')
-			if (typeof item.loginData.password === 'string') {
-				// delete password if stored unencrypted (auth token will be stored)
-				browser.storage.local.remove(['loginData'])
-			}
-			loginUser(sessionData.session_id, item.loginData)
-				.then((data) => {
-					console.log(`User logged in until ${data.expires}`);
-					// store auth, expiration and userId, then reload
-					browser.storage.local.set({ login: { auth: data.auth, expiration: data.expires }, user: { userId: data.user.user_id } }, reloadTab)
-				})
-				.catch((_e) => {
-					notifyUser('Failed to login, please log in manually.')
-					console.log(_e)
-					reloadTab()
-				});
-		} else if (sessionData.user !== null && settings.saveLogin) {
-			// user was already logged in when starting the session, store the new auth and expiration
-			console.log(`Logged in until ${sessionData.expires}`)
-			browser.storage.local.set({ login: { auth: sessionData.auth, expiration: sessionData.expires } }, reloadTab)
-		} else {
-			// no need to login, reload immediately
-			reloadTab()
-		}
-	})
 }
 
 /**
