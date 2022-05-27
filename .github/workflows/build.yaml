@@ -22,5 +22,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: extension
-          path: /public/extension.zip
+          path: public/extension.zip
           retention-days: 7
