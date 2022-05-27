@@ -1,4 +1,3 @@
-/* global chrome, window, document, encrypt */
 var browser = browser || chrome;
 
 /**
@@ -44,30 +43,6 @@ browser.runtime.onMessage.addListener((message) => {
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	if (isLoginPage()) {
 		browser.runtime.sendMessage({ action: 'resetLastUnblock' });
-		if (settings.saveLogin) {
-			// login data should be saved --> add event handler to form submit that stores username and password in local storage
-			document.querySelector('#login_form').addEventListener('submit', () => {
-				let username = document.querySelector('#login_form_name').value;
-				let password = document.querySelector('#login_form_password').value;
-				encrypt(username, password)
-					.then(encrypted => {
-						browser.storage.local.set({
-							loginData: {
-								username: username,
-								password: encrypted
-							}
-						});
-					})
-					.catch(() => {
-						browser.storage.local.set({
-							loginData: {
-								username: username,
-								password: password
-							}
-						});
-					});
-			});
-		}
 	} else if (document.getElementById('footer_country_flag') && !isUs()) {
 		if (settings.switchRegion) {
 			let hostname = window.location.hostname;

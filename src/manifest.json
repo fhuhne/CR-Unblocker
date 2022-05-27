@@ -1,11 +1,10 @@
 {
   "manifest_version": 2,
   "name": "CR-Unblocker",
-  "version": "2.3.1",
-  "description": "A tool that will set the Crunchyroll Session ID to an American session ID",
-  "homepage_url": "https://cr-unblocker.us.to/ ",
+  "version": "3.0.0",
+  "description": "A tool that will proxy the Crunchyroll Session ID through a US server.",
+  "homepage_url": "https://cr-unblocker.us.to/",
   "author": "Finn",
-
   "icons": {
     "128": "icons/Crunchyroll-128.png",
     "48": "icons/Crunchyroll-48.png",
@@ -18,12 +17,14 @@
     "notifications",
     "storage",
     "*://*.crunchyroll.com/*",
-    "*://*.cr-unblocker.us.to/*"
+    "*://*.cr-unblocker.us.to/*",
+    "webRequest",
+    "proxy"
   ],
 
   "content_scripts": [{
-    "matches": ["*://*.crunchyroll.com/*"],
-    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "content.js"]
+    "matches": ["*://www.crunchyroll.com/*"],
+    "js": ["content.js"]
   }],
 
   "browser_action": {
@@ -37,10 +38,20 @@
   },
 
   "background": {
-    "scripts": ["vendor/encoding-indexes.js", "vendor/encoding.js", "encryption.js", "settings.js", "background_script.js"]
+    "scripts": [
+      "settings.js",
+      "background_script.js",
+      "background.js"
+    ]
   },
 
   "options_ui": {
     "page": "dashboard.html"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "91.1.0"
+    }
   }
 }

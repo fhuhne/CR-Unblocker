@@ -1,4 +1,3 @@
-/* global chrome, window, document */
 var browser = browser || chrome;
 
 /**
@@ -7,7 +6,7 @@ var browser = browser || chrome;
  */
 ((global) => {
 	// Settings object with default settings
-	let settings = { saveLogin: false, switchRegion: true };
+	let settings = { switchRegion: true, socksCustom: false, socksHost: '', socksPort: 1080, socksUser: '', socksPass: '' };
 	let validSettings = Object.keys(settings);
 
 	/**
@@ -18,15 +17,8 @@ var browser = browser || chrome;
 			// Merge saved settings with default settings overwriting the default ones
 			settings = Object.assign(settings, item.settings);
 		} else {
-			browser.storage.local.get({ saveLogin: null }, (saveLogin) => {
-				// Migrate from old version
-				if (saveLogin.saveLogin !== null) {
-					settings.saveLogin = saveLogin.saveLogin;
-					browser.storage.local.remove(['saveLogin']);
-				}
-				// Save default settings
-				browser.storage.local.set({ settings: settings });
-			});
+			// Save default settings
+			browser.storage.local.set({ settings: settings });
 		}
 	});
 

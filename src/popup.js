@@ -1,18 +1,17 @@
-/* global chrome, window, document */
 var browser = browser || chrome;
 
 /**
  * Open new tab on button click
  */
 document.getElementById('open-cr').addEventListener('click', () => {
-	browser.tabs.create({ url: 'http://crunchyroll.com/videos/anime/' });
+	browser.tabs.create({ url: 'http://crunchyroll.com/' });
 });
 
 /**
  * Open dashboard on button click
  */
 document.getElementById('open-dashboard').addEventListener('click', () => {
-	browser.tabs.create({ url: browser.extension.getURL('dashboard.html') });
+	browser.tabs.create({ url: browser.runtime.getURL('dashboard.html') });
 });
 
 /**
