@@ -11,7 +11,7 @@ document.getElementById('open-cr').addEventListener('click', () => {
  * Open dashboard on button click
  */
 document.getElementById('open-dashboard').addEventListener('click', () => {
-	browser.tabs.create({ url: browser.extension.getURL('dashboard.html') });
+	browser.tabs.create({ url: browser.runtime.getURL('dashboard.html') });
 });
 
 /**
