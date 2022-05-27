@@ -1,4 +1,3 @@
-/* global chrome, window, document */
 var browser = browser || chrome;
 
 /**

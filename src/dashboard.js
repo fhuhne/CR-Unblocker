@@ -1,4 +1,3 @@
-/* global chrome, window, document */
 var browser = browser || chrome;
 
 /**
@@ -60,11 +59,11 @@ function addSettingInput(id, callback) {
  * Save states
  */
 addSettingCheckbox('switchRegion');
-addSettingCheckbox('socks_custom');
-addSettingInput('socks_host');
-addSettingInput('socks_port');
-addSettingInput('socks_user');
-addSettingInput('socks_pass');
+addSettingCheckbox('socksCustom');
+addSettingInput('socksHost');
+addSettingInput('socksPort');
+addSettingInput('socksUser');
+addSettingInput('socksPass');
 
 /**
  * Display settings in DOM
@@ -72,11 +71,11 @@ addSettingInput('socks_pass');
  */
 function displaySettings(settings) {
 	document.getElementById('switchRegion').checked = settings.switchRegion;
-	document.getElementById('socks_custom').value = settings.socks_custom;
-	document.getElementById('socks_host').value = settings.socks_host;
-	document.getElementById('socks_port').value = settings.socks_port;
-	document.getElementById('socks_user').value = settings.socks_user;
-	document.getElementById('socks_pass').value = settings.socks_pass;
+	document.getElementById('socksCustom').value = settings.socksCustom;
+	document.getElementById('socksHost').value = settings.socksHost;
+	document.getElementById('socksPort').value = settings.socksPort;
+	document.getElementById('socksUser').value = settings.socksUser;
+	document.getElementById('socksPass').value = settings.socksPass;
 }
 
 /**

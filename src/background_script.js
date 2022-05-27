@@ -1,4 +1,3 @@
-/* global fetch, chrome, decrypt */
 var browser = browser || chrome
 
 const SERVERS = [
@@ -23,7 +22,7 @@ function localizeToUs(extension) {
 
 	if (lastUnblock && lastUnblock > new Date().getTime()) {
 		console.log('Not fetching session id, last try less than a minute ago.')
-		console.log(`Remaining: ${((lastUnblock - new Date().getTime()) / 1000)} seconds`)
+		console.log(`Remaining: ${(lastUnblock - new Date().getTime()) / 1000} seconds`)
 		return
 	}
 
@@ -126,39 +125,6 @@ function updateCookies(extension, sessionData) {
 		})
 	})
 	reloadTab()
-}
-
-/**
- * Logs in a user using the given login data
- * @param {String} sessionId current session id
- * @param {Object} loginData login data (properties username and password are needed)
- * @return {Promise} A promise resolving to the login data (contains user data, auth and expiration)
- */
-function loginUser(sessionId, loginData) {
-	return new Promise((resolve, reject) => {
-		if (typeof loginData.password === 'string') {
-			// if the password is decrypted, login using the API
-			fetch(`https://api.crunchyroll.com/login.0.json?session_id=${sessionId}&locale=enUS&account=${encodeURIComponent(loginData.username)}&password=${encodeURIComponent(loginData.password)}`, { method: 'POST' })
-				.then((res) => res.json())
-				.then((res) => {
-					if (res.error === true) {
-						reject(new Error(res.message))
-					} else {
-						resolve(res.data)
-					}
-				})
-				.catch((e) => reject(e))
-		} else {
-			// password isn't in plain text, decrypt it
-			decrypt(loginData.username, loginData.password)
-				.then(password => {
-					loginUser(sessionId, { username: loginData.username, password: password })
-						.then(data => resolve(data))
-						.catch(_e => reject(_e))
-				})
-				.catch(_e => reject(_e))
-		}
-	});
 }
 
 /**

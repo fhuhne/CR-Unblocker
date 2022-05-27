@@ -1,4 +1,3 @@
-/* global chrome, window, document */
 var browser = browser || chrome;
 
 /**
@@ -7,7 +6,7 @@ var browser = browser || chrome;
  */
 ((global) => {
 	// Settings object with default settings
-	let settings = { switchRegion: true, socks_custom: false, socks_host: "", socks_port: 1080, socks_user: "", socks_pass: ""};
+	let settings = { switchRegion: true, socksCustom: false, socksHost: '', socksPort: 1080, socksUser: '', socksPass: '' };
 	let validSettings = Object.keys(settings);
 
 	/**

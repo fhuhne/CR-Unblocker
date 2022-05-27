@@ -1,5 +1,5 @@
 body {
-	font-family: 'Montserrat', sans-serif;
+	font-family: Montserrat, sans-serif;
 }
 
 .tabs {
@@ -10,7 +10,7 @@ body {
 .tabs::after {
 	display: block;
 	clear: both;
-	content: '';
+	content: "";
 }
 .tabs li {
 	list-style: none;
@@ -47,7 +47,7 @@ body {
 	display: block;
 }
 .brand {
-	font-family: 'Roboto', sans-serif;
+	font-family: Roboto, sans-serif;
 	font-size: 1.2rem;
 }
 .tabs li p.brand {
@@ -60,7 +60,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	font-weight: lighter;
-	font-family: 'Roboto', sans-serif;
+	font-family: Roboto, sans-serif;
 }
 .tab :first-child {
 	margin-top: 0;
