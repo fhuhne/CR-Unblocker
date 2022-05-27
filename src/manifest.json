@@ -3,7 +3,7 @@
   "name": "CR-Unblocker",
   "version": "3.0.0",
   "description": "A tool that will proxy the Crunchyroll Session ID through a US server.",
-  "homepage_url": "https://cr-unblocker.us.to/ ",
+  "homepage_url": "https://cr-unblocker.us.to/",
   "author": "Finn",
   "icons": {
     "128": "icons/Crunchyroll-128.png",
@@ -24,7 +24,7 @@
 
   "content_scripts": [{
     "matches": ["*://www.crunchyroll.com/*"],
-    "js": ["vendor/encoding-indexes.js", "vendor/encoding.js", "content.js"]
+    "js": ["content.js"]
   }],
 
   "browser_action": {
@@ -39,8 +39,6 @@
 
   "background": {
     "scripts": [
-      "vendor/encoding-indexes.js",
-      "vendor/encoding.js",
       "settings.js",
       "background_script.js",
       "background.js"
