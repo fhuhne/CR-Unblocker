@@ -49,5 +49,11 @@
 
   "options_ui": {
     "page": "dashboard.html"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "91.1.0"
+    }
   }
 }
