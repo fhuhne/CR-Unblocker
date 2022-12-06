@@ -18,5 +18,5 @@ function handleProxyRequest(requestInfo) {
 	}
 
 	console.log('Proxied request %s to %s %d', requestInfo.url, settings.socksHost, settings.socksPort);
-	return { type: 'socks', host: settings.socksHost, port: settings.socksPort, username: settings.socksUser, password: settings.socksPass }
+	return { type: 'socks', proxyDNS: true, host: settings.socksHost, port: settings.socksPort, username: settings.socksUser, password: settings.socksPass }
 }
