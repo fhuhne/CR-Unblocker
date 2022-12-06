@@ -71,7 +71,7 @@ addSettingInput('socksPass');
  */
 function displaySettings(settings) {
 	document.getElementById('switchRegion').checked = settings.switchRegion;
-	document.getElementById('socksCustom').value = settings.socksCustom;
+	document.getElementById('socksCustom').checked = settings.socksCustom;
 	document.getElementById('socksHost').value = settings.socksHost;
 	document.getElementById('socksPort').value = settings.socksPort;
 	document.getElementById('socksUser').value = settings.socksUser;
@@ -90,11 +90,4 @@ browser.runtime.onMessage.addListener((message) => {
 	if (message.event === 'settingsChanged') {
 		displaySettings(message.settings);
 	}
-});
-
-/**
- * Delete data on button click
- */
-document.getElementById('delete-data').addEventListener('click', () => {
-	browser.storage.local.remove(['loginData', 'login', 'user']);
 });
