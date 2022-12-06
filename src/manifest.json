@@ -22,11 +22,6 @@
     "proxy"
   ],
 
-  "content_scripts": [{
-    "matches": ["*://www.crunchyroll.com/*"],
-    "js": ["content.js"]
-  }],
-
   "browser_action": {
     "default_icon": {
       "128": "icons/Crunchyroll-128.png",
@@ -40,7 +35,6 @@
   "background": {
     "scripts": [
       "settings.js",
-      "background_script.js",
       "background.js"
     ]
   },
