@@ -29,8 +29,5 @@ npm run build
 ## Using a private proxy
 If you really don't trust us or the server is offline you can point the extension to any SOCKS proxy. See the extension settings.
 
-## Backend repo
-The repo for the server backend is [here](https://github.com/fhuhne/CR-Unblocker-Server). (Legacy method for non beta version!)
-
 ## Contributing
 The extension is always under development. Some features might be added later. If you have any idea on what to add feel free to contribute to the project or open an issue.

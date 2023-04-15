@@ -1,6 +1,6 @@
 {
   "name": "cr_unblocker",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "",
   "main": "server.js",
   "scripts": {

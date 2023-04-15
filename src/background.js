@@ -18,5 +18,19 @@ function handleProxyRequest(requestInfo) {
 	}
 
 	console.log('Proxied request %s to %s %d', requestInfo.url, settings.socksHost, settings.socksPort);
-	return { type: 'socks', proxyDNS: true, host: settings.socksHost, port: settings.socksPort, username: settings.socksUser, password: settings.socksPass }
+	return [
+		{ type: 'socks', proxyDNS: true, failoverTimeout: 3, host: settings.socksHost, port: settings.socksPort, username: settings.socksUser, password: settings.socksPass },
+		{ type: 'direct' }
+	]
 }
+
+// Log any errors from the proxy script
+browser.proxy.onError.addListener(error => {
+	console.error(`Proxy error: ${error.message}`);
+	browser.notifications.create("proxy-error", {
+		type: "basic",
+		iconUrl: browser.runtime.getURL("icons/Crunchyroll-128.png"),
+		title: "CR-Unblocker encountered an error!",
+		message: error.message,
+	  });
+});
