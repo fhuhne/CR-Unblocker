@@ -27,10 +27,10 @@ function handleProxyRequest(requestInfo) {
 // Log any errors from the proxy script
 browser.proxy.onError.addListener(error => {
 	console.error(`Proxy error: ${error.message}`);
-	browser.notifications.create("proxy-error", {
-		type: "basic",
-		iconUrl: browser.runtime.getURL("icons/Crunchyroll-128.png"),
-		title: "CR-Unblocker encountered an error!",
-		message: error.message,
-	  });
+	browser.notifications.create('proxy-error', {
+		type: 'basic',
+		iconUrl: browser.runtime.getURL('icons/Crunchyroll-128.png'),
+		title: 'CR-Unblocker encountered an error!',
+		message: error.message
+	});
 });
