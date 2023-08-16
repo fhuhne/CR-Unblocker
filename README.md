@@ -11,6 +11,19 @@ You can just install the Firefox Extension (also working on Android) from [here]
 Unfortunately the Chrome and Edge Stores have removed the unblocker from their stores, reuploading would probably not work so this option will no longer be there.
 
 Alternatively you can just download the source and package it yourself. The extension is tested in Firefox, but it should also work in all other browsers supporting WebExtensions API.
+## Installing mobile (Andriod only)
+**Requirements**: <br> <li> Android version 5.0 or higher </li> <li> Mozilla Firefox account </li> 
+
+Visit the [Mozilla Firefox site](https://support.mozilla.org/en-US/kb/access-mozilla-services-firefox-account) and create a account. The account is required to [create a collection](https://support.mozilla.org/en-US/kb/how-use-collections-addonsmozillaorg). Then you have to add the CR-Unblocker extension to your collection. The created collection will be added to your Firefox Nightly so the exentsion can be used.
+
+You have to download [Firefox Nightly](https://play.google.com/store/apps/datasafety?id=org.mozilla.fenix&hl=en_US). After the installation you have to [add the collection](https://blog.mozilla.org/addons/2020/09/29/expanded-extension-support-in-firefox-for-android-nightly/) to your app.
+You can find the user id and the collection name in [your collection](https://addons.mozilla.org/en-US/firefox/collections/).
+
+**Tips for using the app** <br>
+For adjusting the settings: <br> Click on the three dots --> Add-ons --> Cr-Unblocker --> Make your changes
+git 
+
+For open Crunchyroll over CR-Unblocker: <br>Open a random website --> Click on the three dots --> Add-ons --> Cr-Unblocker --> Open Crunyroll --> Enjoy
 
 ## Requirements
 
