@@ -1,54 +1,61 @@
-body {
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100vh;
 	font-family: Montserrat, sans-serif;
+	display: flex;
+	flex-direction: column;
+	background-color: #f78c25;
+	color: white;
+}
+
+.tab-area {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
 }
 
 .tabs {
 	padding: 0 0 0 10px;
 	margin: 0;
-	border-bottom: 1px solid #666;
+	border-bottom: 1px solid #fff8;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	background-color: #f78c25;
 }
-.tabs::after {
-	display: block;
-	clear: both;
-	content: "";
-}
+
 .tabs li {
 	list-style: none;
 	margin: 0 5px;
-	float: left;
 	position: relative;
 	bottom: -1px;
 }
-.tabs li p {
-	margin: 0;
-}
+
 .tabs li a {
 	text-decoration: none;
-	color: black;
+	color: white;
 	padding: 5px 15px;
 	margin-top: 8px;
 	border-radius: 3px 3px 0 0;
-	border: 1px solid #666;
-	display: inline-block;
+	border: 1px solid #fff8;
+	background-color: transparent;
+	transition: background 0.2s, color 0.2s;
 }
-.tabs li a:hover, .tabs li.active a {
-	border-bottom: 1px solid white;
+
+.tabs li a:hover,
+.tabs li.active a {
+	background-color: white;
+	color: #f38022;
+	border-bottom: 1px solid #f78c25;
 	padding: 9px 15px;
 	margin-top: 0;
 }
 
-.tab-content {
-	padding: 15px;
-}
-.tab {
-	display: none;
-}
-.tab.active {
-	display: block;
-}
 .brand {
 	font-family: Roboto, sans-serif;
 	font-size: 1.2rem;
+	color: white;
 }
 .tabs li p.brand {
 	margin-top: 4px;
@@ -58,9 +65,26 @@ body {
 	font-size: 0.8rem;
 }
 
+.tab-content {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding: 15px;
+	min-height: 0;
+	background-color: #f78c25;
+	color: white;
+}
+
+.tab {
+	display: none;
+}
+.tab.active {
+	display: block;
+}
+
 h1, h2, h3, h4, h5, h6 {
-	font-weight: lighter;
+	font-weight: bold;
 	font-family: Roboto, sans-serif;
+	color: white;
 }
 .tab :first-child {
 	margin-top: 0;
@@ -74,4 +98,86 @@ h1, h2, h3, h4, h5, h6 {
 	border-radius: 5px;
 	border: none;
 	font-size: 1rem;
+	background-color: white;
+	color: #f38022;
+	min-width: 80%;
+	text-align: center;
+	transition: background 0.2s, color 0.2s;
+}
+.cr-button:hover {
+	background-color: #ffb268;
+	color: white;
+}
+
+.tab-content::-webkit-scrollbar {
+	width: 8px;
+}
+.tab-content::-webkit-scrollbar-thumb {
+	background-color: rgb(255 255 255 / 30%);
+	border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+	html, body {
+		font-size: 16px;
+		padding: 0;
+		min-width: 0;
+	}
+
+	.tab-area, .tab-content {
+		padding: 5px;
+	}
+
+	.tabs {
+		flex-direction: column;
+		padding: 0;
+	}
+
+	.tabs li {
+		margin: 2px 0;
+		width: 100%;
+	}
+
+	.tabs li a, .tabs li.active a, .tabs li p.brand {
+		width: 100%;
+		display: block;
+		padding: 10px 5px;
+		text-align: left;
+		font-size: 1rem;
+	}
+
+	.tab-content {
+		padding: 8px;
+	}
+
+	table {
+		width: 100%;
+		font-size: 1em;
+	}
+
+	table tr {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 10px;
+	}
+
+	table td {
+		padding: 4px 0;
+		display: block;
+		width: 100%;
+	}
+
+	input[type="text"], input[type="password"], select {
+		width: 100%;
+		font-size: 1em;
+		padding: 10px;
+		box-sizing: border-box;
+	}
+
+	.cr-button {
+		min-width: 100%;
+		font-size: 1em;
+		padding: 12px 0;
+		margin: 12px 0;
+	}
 }

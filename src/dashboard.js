@@ -73,7 +73,7 @@ addSettingInput('proxyPass')
 function displaySettings(settings) {
 	document.getElementById('switchRegion').checked = settings.switchRegion
 	document.getElementById('proxyCustom').checked = settings.proxyCustom
-	document.getElementById('proxyType').value = settings.proxyType || 'socks5'
+	document.getElementById('proxyType').value = settings.proxyType || 'socks'
 	document.getElementById('proxyHost').value = settings.proxyHost
 	document.getElementById('proxyPort').value = settings.proxyPort
 	document.getElementById('proxyUser').value = settings.proxyUser

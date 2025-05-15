@@ -72,7 +72,7 @@ function fetchWithTimeout(url, options = {}, timeout = 5000) {
 		.finally(() => clearTimeout(timer));
 }
 
-browser.runtime.onMessage.addListener((message, sender) => {
+browser.runtime.onMessage.addListener((message) => {
 	if (message.action === 'testProxy') {
 		proxyTestInProgress = true;
 		proxyTestError = null;

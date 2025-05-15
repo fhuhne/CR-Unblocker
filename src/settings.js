@@ -13,7 +13,7 @@ var browser = browser || chrome;
 		proxyPort: 1080,
 		proxyUser: '',
 		proxyPass: '',
-		proxyType: 'socks5'
+		proxyType: 'socks'
 	}
 	let validSettings = Object.keys(settings);
 

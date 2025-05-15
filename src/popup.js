@@ -110,3 +110,7 @@ window.addEventListener('unload', () => {
 		clearInterval(proxyStatusInterval)
 	}
 })
+
+if (/android|iphone|ipad|mobile/i.test(navigator.userAgent)) {
+	document.body.classList.add('mobile-popup');
+}
