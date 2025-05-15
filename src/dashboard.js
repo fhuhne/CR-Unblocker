@@ -58,24 +58,26 @@ function addSettingInput(id, callback) {
 /**
  * Save states
  */
-addSettingCheckbox('switchRegion');
-addSettingCheckbox('socksCustom');
-addSettingInput('socksHost');
-addSettingInput('socksPort');
-addSettingInput('socksUser');
-addSettingInput('socksPass');
+addSettingCheckbox('switchRegion')
+addSettingCheckbox('proxyCustom')
+addSettingInput('proxyType')
+addSettingInput('proxyHost')
+addSettingInput('proxyPort')
+addSettingInput('proxyUser')
+addSettingInput('proxyPass')
 
 /**
  * Display settings in DOM
  * @param  {Object} settings Settings to display
  */
 function displaySettings(settings) {
-	document.getElementById('switchRegion').checked = settings.switchRegion;
-	document.getElementById('socksCustom').checked = settings.socksCustom;
-	document.getElementById('socksHost').value = settings.socksHost;
-	document.getElementById('socksPort').value = settings.socksPort;
-	document.getElementById('socksUser').value = settings.socksUser;
-	document.getElementById('socksPass').value = settings.socksPass;
+	document.getElementById('switchRegion').checked = settings.switchRegion
+	document.getElementById('proxyCustom').checked = settings.proxyCustom
+	document.getElementById('proxyType').value = settings.proxyType || 'socks5'
+	document.getElementById('proxyHost').value = settings.proxyHost
+	document.getElementById('proxyPort').value = settings.proxyPort
+	document.getElementById('proxyUser').value = settings.proxyUser
+	document.getElementById('proxyPass').value = settings.proxyPass
 }
 
 /**
@@ -89,5 +91,49 @@ browser.runtime.sendMessage({ action: 'getSettings' }, displaySettings);
 browser.runtime.onMessage.addListener((message) => {
 	if (message.event === 'settingsChanged') {
 		displaySettings(message.settings);
+	}
+});
+
+/**
+ * Test for the proxy configuration
+ */
+document.getElementById('testProxyBtn').addEventListener('click', () => {
+	const proxyType = document.getElementById('proxyType').value;
+	const proxyHost = document.getElementById('proxyHost').value;
+	const proxyPort = parseInt(document.getElementById('proxyPort').value, 10);
+	const proxyUser = document.getElementById('proxyUser').value;
+	const proxyPass = document.getElementById('proxyPass').value;
+
+	document.getElementById('proxyTestResult').textContent = 'Testing proxy...';
+
+	browser.runtime.sendMessage({
+		action: 'testProxy',
+		proxy: {
+			type: proxyType,
+			host: proxyHost,
+			port: proxyPort,
+			username: proxyUser,
+			password: proxyPass
+		}
+	});
+});
+
+// Listen for the result
+browser.runtime.onMessage.addListener((message) => {
+	if (message.event === 'proxyTestResult') {
+		const output = document.getElementById('proxyTestResult');
+		output.style.fontWeight = 'bold';
+		output.style.padding = '8px 0';
+		output.style.borderRadius = '4px';
+
+		if (message.success) {
+			output.textContent = '✅ Proxy is working!';
+			output.style.color = '#f78c25';
+			output.style.backgroundColor = 'white';
+		} else {
+			output.textContent = `❌ Proxy failed: ${message.error}`;
+			output.style.color = 'white';
+			output.style.backgroundColor = '#dc7c20';
+		}
 	}
 });
