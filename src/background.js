@@ -1,7 +1,7 @@
 var browser = browser || chrome;
 
 browser.proxy.onRequest.addListener(handleProxyRequest,
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token', '*://cr-unblocker.us.to/'] }
+	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
 );
 
 
@@ -20,7 +20,7 @@ function handleProxyRequest(requestInfo) {
 
 	if (!settings.switchRegion) {
 		console.log('Region switching disabled');
-		return [{ type: 'direct' }];
+		return
 	}
 
 	let proxyConfig = defaultProxyConfig
@@ -36,12 +36,9 @@ function handleProxyRequest(requestInfo) {
 
 		}
 	}
-	if (proxyTestInProgress) {
-		console.log(`Test ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`);
-	} else {
-		console.log(`Using ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`);
-	}
-	return [proxyConfig];
+	console.log(`Using ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`);
+
+	return [proxyConfig, { type: 'direct' }];
 }
 
 // Log any errors from the proxy script
@@ -76,10 +73,28 @@ browser.runtime.onMessage.addListener((message) => {
 	if (message.action === 'testProxy') {
 		proxyTestInProgress = true;
 		proxyTestError = null;
+		const proxy = message.proxy;
+		const testProxyHandler = () => {
+			console.log(`Test ${proxy.type} proxy for ${proxy.url} -> ${proxy.host}:${proxy.port}`);
+			return {
+				type: proxy.type,
+				host: proxy.host,
+				port: parseInt(proxy.port, 10),
+				username: proxy.username,
+				password: proxy.password,
+				proxyDNS: proxy.type !== 'http',
+				failoverTimeout: 3
 
-		return fetchWithTimeout('https://cr-unblocker.us.to', { method: 'GET', cache: 'no-store' })
+			};
+		}
+		browser.proxy.onRequest.addListener(
+			testProxyHandler,
+			{ urls: ['*://*.crunchyroll.com/'] }
+		);
+		return fetchWithTimeout('https://www.crunchyroll.com', { method: 'GET', cache: 'no-store' })
 			.then(res => {
 				proxyTestInProgress = false;
+				browser.proxy.onRequest.removeListener(testProxyHandler);
 				if (proxyTestError) {
 					browser.runtime.sendMessage({
 						event: 'proxyTestResult',
@@ -101,7 +116,7 @@ browser.runtime.onMessage.addListener((message) => {
 			})
 			.catch(err => {
 				proxyTestInProgress = false;
-
+				browser.proxy.onRequest.removeListener(testProxyHandler);
 				if (proxyTestError) {
 					browser.runtime.sendMessage({
 						event: 'proxyTestResult',

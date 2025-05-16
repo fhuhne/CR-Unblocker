@@ -84,8 +84,8 @@ addSettingCheckbox('switchRegion');
  */
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	document.getElementById('switchRegion').checked = settings.switchRegion;
-	handleSwitchRegionChange(settings.switchRegion)
 	globalSettings = settings
+	handleSwitchRegionChange(settings.switchRegion)
 });
 
 browser.runtime.onMessage.addListener((message) => {
