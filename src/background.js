@@ -28,7 +28,7 @@ async function getProxyConfig(settings) {
 	return { ...DEFAULT_PROXY_CONFIG }
 }
 
-function handleProxyRequest(requestInfo) {
+async function handleProxyRequest(requestInfo) {
 	const settings = this.settings.get()
 
 	if (!settings.switchRegion) {
@@ -36,7 +36,7 @@ function handleProxyRequest(requestInfo) {
 		return
 	}
 
-	const proxyConfig = getProxyConfig(settings)
+	const proxyConfig = await getProxyConfig(settings)
 	console.log(`Using ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`)
 	return [proxyConfig, { type: 'direct' }]
 }
@@ -45,6 +45,24 @@ browser.proxy.onRequest.addListener(
 	handleProxyRequest,
 	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
 )
+browser.webRequest.onAuthRequired.addListener(
+	() => {
+		const settings = this.settings.get();
+		console.log(`Using ${settings.proxyType} proxy for authentication`)
+		if (settings.proxyType !== 'http' && settings.proxyType !== 'https') {
+			return {};
+		}
+		console.log(`Auth as ${settings.proxyUser} with password ${settings.proxyPass}`)
+		return {
+			authCredentials: {
+				username: settings.proxyUser || '',
+				password: settings.proxyPass || ''
+			}
+		};
+	},
+	{ urls: ['*://*.crunchyroll.com/auth/v1/token', '*://*.crunchyroll.com/'] },
+	['blocking']
+);
 
 browser.proxy.onError.addListener(error => {
 	console.error(`Proxy error: ${error.message}`)
@@ -76,7 +94,9 @@ async function testProxyConfig(proxy, sendResult) {
 	proxyTestInProgress = true
 	proxyTestError = null
 
-	function testProxyHandler() {
+	function testProxyHandler(requestInfo) {
+		console.log(`Testing ${proxy.type} proxy for ${requestInfo.url} -> ${proxy.host}:${proxy.port}`)
+
 		return {
 			type: proxy.type,
 			host: proxy.host,

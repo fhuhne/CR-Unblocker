@@ -19,6 +19,7 @@
     "*://*.crunchyroll.com/*",
     "*://*.cr-unblocker.us.to/*",
     "webRequest",
+    "webRequestBlocking",
     "proxy"
   ],
 
