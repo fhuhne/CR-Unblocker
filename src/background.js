@@ -1,11 +1,6 @@
-var browser = browser || chrome;
+const browser = window.browser || window.chrome
 
-browser.proxy.onRequest.addListener(handleProxyRequest,
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
-);
-
-
-const defaultProxyConfig = {
+const DEFAULT_PROXY_CONFIG = {
 	type: 'socks',
 	proxyDNS: true,
 	host: 'cr-unblocker.us.to',
@@ -15,17 +10,12 @@ const defaultProxyConfig = {
 	failoverTimeout: 3
 }
 
-function handleProxyRequest(requestInfo) {
-	const settings = this.settings.get();
+let proxyTestInProgress = false
+let proxyTestError = null
 
-	if (!settings.switchRegion) {
-		console.log('Region switching disabled');
-		return
-	}
-
-	let proxyConfig = defaultProxyConfig
+async function getProxyConfig(settings) {
 	if (settings.proxyCustom) {
-		proxyConfig = {
+		return {
 			type: settings.proxyType,
 			proxyDNS: settings.proxyType !== 'http',
 			host: settings.proxyHost,
@@ -33,108 +23,112 @@ function handleProxyRequest(requestInfo) {
 			username: settings.proxyUser || '',
 			password: settings.proxyPass || '',
 			failoverTimeout: 3
-
 		}
 	}
-	console.log(`Using ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`);
-
-	return [proxyConfig, { type: 'direct' }];
+	return { ...DEFAULT_PROXY_CONFIG }
 }
 
-// Log any errors from the proxy script
-let proxyTestInProgress = false;
-let proxyTestError = null;
+function handleProxyRequest(requestInfo) {
+	const settings = this.settings.get()
+
+	if (!settings.switchRegion) {
+		console.log('Region switching disabled')
+		return
+	}
+
+	const proxyConfig = getProxyConfig(settings)
+	console.log(`Using ${proxyConfig.type} proxy for ${requestInfo.url} -> ${proxyConfig.host}:${proxyConfig.port}`)
+	return [proxyConfig, { type: 'direct' }]
+}
+
+browser.proxy.onRequest.addListener(
+	handleProxyRequest,
+	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
+)
 
 browser.proxy.onError.addListener(error => {
-	console.error(`Proxy error: ${error.message}`);
+	console.error(`Proxy error: ${error.message}`)
 	if (proxyTestInProgress) {
-		proxyTestError = error.message;
+		proxyTestError = error.message
 	} else {
 		browser.notifications.create('proxy-error', {
 			type: 'basic',
 			iconUrl: browser.runtime.getURL('icons/Crunchyroll-128.png'),
 			title: 'CR-Unblocker encountered an error!',
 			message: error.message
-		});
+		})
 	}
-});
+})
 
-function fetchWithTimeout(url, options = {}, timeout = 5000) {
-	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), timeout);
+async function fetchWithTimeout(url, options = {}, timeout = 5000) {
+	const controller = new AbortController()
+	const timer = setTimeout(() => controller.abort(), timeout)
+	options.signal = controller.signal
 
-	options.signal = controller.signal;
-
-	return fetch(url, options)
-		.finally(() => clearTimeout(timer));
+	try {
+		return await fetch(url, options)
+	} finally {
+		clearTimeout(timer)
+	}
 }
 
-browser.runtime.onMessage.addListener((message) => {
-	if (message.action === 'testProxy') {
-		proxyTestInProgress = true;
-		proxyTestError = null;
-		const proxy = message.proxy;
-		const testProxyHandler = () => {
-			console.log(`Test ${proxy.type} proxy for ${proxy.url} -> ${proxy.host}:${proxy.port}`);
-			return {
-				type: proxy.type,
-				host: proxy.host,
-				port: parseInt(proxy.port, 10),
-				username: proxy.username,
-				password: proxy.password,
-				proxyDNS: proxy.type !== 'http',
-				failoverTimeout: 3
+async function testProxyConfig(proxy, sendResult) {
+	proxyTestInProgress = true
+	proxyTestError = null
 
-			};
+	function testProxyHandler() {
+		return {
+			type: proxy.type,
+			host: proxy.host,
+			port: parseInt(proxy.port, 10),
+			username: proxy.username,
+			password: proxy.password,
+			proxyDNS: proxy.type !== 'http',
+			failoverTimeout: 3
 		}
-		browser.proxy.onRequest.addListener(
-			testProxyHandler,
-			{ urls: ['*://*.crunchyroll.com/'] }
-		);
-		return fetchWithTimeout('https://www.crunchyroll.com', { method: 'GET', cache: 'no-store' })
-			.then(res => {
-				proxyTestInProgress = false;
-				browser.proxy.onRequest.removeListener(testProxyHandler);
-				if (proxyTestError) {
-					browser.runtime.sendMessage({
-						event: 'proxyTestResult',
-						success: false,
-						error: proxyTestError
-					});
-					return { success: false, error: proxyTestError };
-				} else if (res.ok) {
-					browser.runtime.sendMessage({ event: 'proxyTestResult', success: true });
-					return { success: true };
-				} else {
-					browser.runtime.sendMessage({
-						event: 'proxyTestResult',
-						success: false,
-						error: `HTTP error: ${res.status}`
-					});
-					return { success: false, error: `HTTP error: ${res.status}` };
-				}
-			})
-			.catch(err => {
-				proxyTestInProgress = false;
-				browser.proxy.onRequest.removeListener(testProxyHandler);
-				if (proxyTestError) {
-					browser.runtime.sendMessage({
-						event: 'proxyTestResult',
-						success: false,
-						error: proxyTestError
-					});
-					return { success: false, error: proxyTestError };
-				}
-
-				let userError = err.name === 'AbortError'
-					? 'Connection timed out (proxy did not respond within 5 seconds)'
-					: err.message;
-				browser.runtime.sendMessage({
-					event: 'proxyTestResult',
-					success: false,
-					error: userError
-				});
-				return { success: false, error: userError };
-			});
 	}
-});
+
+	browser.proxy.onRequest.addListener(
+		testProxyHandler,
+		{ urls: ['*://*.crunchyroll.com/'] }
+	)
+
+	try {
+		const res = await fetchWithTimeout('https://www.crunchyroll.com', { method: 'GET', cache: 'no-store' }, 5000)
+		let result
+		if (proxyTestError) {
+			result = { success: false, error: proxyTestError }
+		} else if (res.ok) {
+			result = { success: true }
+		} else {
+			result = { success: false, error: `HTTP error: ${res.status}` }
+		}
+		sendResult({ ...result, proxy: `${proxy.host}:${proxy.port}` })
+	} catch (err) {
+		const userError = proxyTestError
+      || (err.name === 'AbortError' ? 'Connection timed out (proxy did not respond within 5 seconds)' : err.message)
+		sendResult({ success: false, error: userError, proxy: `${proxy.host}:${proxy.port}` })
+	} finally {
+		proxyTestInProgress = false
+		browser.proxy.onRequest.removeListener(testProxyHandler)
+	}
+}
+
+browser.runtime.onMessage.addListener(async(message) => {
+	if (message.action === 'testCustomProxy') {
+		await testProxyConfig(message.proxy, result => {
+			browser.runtime.sendMessage({ event: 'customProxyTestResult', ...result })
+		})
+		return true
+	}
+
+	if (message.action === 'testCurrentProxy') {
+		const currentSettings = this.settings.get()
+		const proxyConfig = await getProxyConfig(currentSettings)
+		await testProxyConfig(proxyConfig, result => {
+			browser.runtime.sendMessage({ event: 'proxyTestResult', ...result })
+		})
+
+		return true
+	}
+})

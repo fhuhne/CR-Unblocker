@@ -83,7 +83,10 @@ function displaySettings(settings) {
 /**
  * Display settings on load
  */
-browser.runtime.sendMessage({ action: 'getSettings' }, displaySettings);
+browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
+	displaySettings(settings)
+	handleSwitchRegionChange(settings.switchRegion)
+});
 
 /**
  * Listen for settings update messages
@@ -91,6 +94,7 @@ browser.runtime.sendMessage({ action: 'getSettings' }, displaySettings);
 browser.runtime.onMessage.addListener((message) => {
 	if (message.event === 'settingsChanged') {
 		displaySettings(message.settings);
+		handleSwitchRegionChange(message.settings.switchRegion);
 	}
 });
 
@@ -107,7 +111,7 @@ document.getElementById('testProxyBtn').addEventListener('click', () => {
 	document.getElementById('proxyTestResult').textContent = 'Testing proxy...';
 
 	browser.runtime.sendMessage({
-		action: 'testProxy',
+		action: 'testCustomProxy',
 		proxy: {
 			type: proxyType,
 			host: proxyHost,
@@ -120,20 +124,77 @@ document.getElementById('testProxyBtn').addEventListener('click', () => {
 
 // Listen for the result
 browser.runtime.onMessage.addListener((message) => {
-	if (message.event === 'proxyTestResult') {
+	if (message.event === 'customProxyTestResult') {
 		const output = document.getElementById('proxyTestResult');
 		output.style.fontWeight = 'bold';
 		output.style.padding = '8px 0';
 		output.style.borderRadius = '4px';
 
 		if (message.success) {
-			output.textContent = '✅ Proxy is working!';
+			output.textContent = `✅ Proxy[${message.proxy}] is working!`;
 			output.style.color = '#f78c25';
 			output.style.backgroundColor = 'white';
 		} else {
-			output.textContent = `❌ Proxy failed: ${message.error}`;
+			output.textContent = `❌ Proxy[${message.proxy}] failed: ${message.error}`;
+			output.style.color = 'white';
+			output.style.backgroundColor = '#dc7c20';
+		}
+	}
+
+	if (message.event === 'proxyTestResult') {
+		const output = document.getElementById('proxyStatus');
+
+		if (message.success) {
+			output.textContent = `✅ Proxy[${message.proxy}] is working!`;
+			output.style.color = '#f78c25';
+			output.style.backgroundColor = 'white';
+		} else {
+			output.textContent = `❌ Proxy[${message.proxy}] failed: ${message.error}`;
 			output.style.color = 'white';
 			output.style.backgroundColor = '#dc7c20';
 		}
 	}
 });
+
+let proxyStatusInterval = null
+
+function testProxyStatus() {
+	const statusEl = document.getElementById('proxyStatus');
+	statusEl.textContent = 'Connecting...';
+	statusEl.style.color = 'white';
+	statusEl.style.backgroundColor = 'transparent';
+
+	browser.runtime.sendMessage({
+		action: 'testCurrentProxy'
+	});
+}
+
+function handleSwitchRegionChange(enabled) {
+	if (enabled) {
+		setProxyStatusSection(true);
+		testProxyStatus();
+		if (!proxyStatusInterval) {
+			proxyStatusInterval = setInterval(testProxyStatus, 15000);
+		}
+	} else {
+		setProxyStatusSection(false);
+		if (proxyStatusInterval) {
+			clearInterval(proxyStatusInterval);
+			proxyStatusInterval = null;
+		}
+	}
+}
+
+function setProxyStatusSection(show) {
+	const section = document.getElementById('proxyStatus');
+	section.style.display = show ? 'block' : 'none';
+	if (!show) {
+		document.getElementById('proxyStatus').textContent = '';
+	}
+}
+
+window.addEventListener('unload', () => {
+	if (proxyStatusInterval) {
+		clearInterval(proxyStatusInterval)
+	}
+})

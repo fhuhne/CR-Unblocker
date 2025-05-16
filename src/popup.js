@@ -1,7 +1,7 @@
 var browser = browser || chrome
 
 let proxyStatusInterval = null
-let globalSettings = {}
+
 function setProxyStatusSection(show) {
 	const section = document.getElementById('proxy-status-section');
 	section.style.display = show ? 'block' : 'none';
@@ -16,14 +16,7 @@ function testProxyStatus() {
 	statusEl.style.backgroundColor = 'transparent';
 
 	browser.runtime.sendMessage({
-		action: 'testProxy',
-		proxy: {
-			type: globalSettings.proxyType,
-			host: globalSettings.proxyHost,
-			port: globalSettings.proxyPort,
-			username: globalSettings.proxyUser,
-			password: globalSettings.proxyPass
-		}
+		action: 'testCurrentProxy'
 	});
 }
 
@@ -84,7 +77,6 @@ addSettingCheckbox('switchRegion');
  */
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	document.getElementById('switchRegion').checked = settings.switchRegion;
-	globalSettings = settings
 	handleSwitchRegionChange(settings.switchRegion)
 });
 
@@ -99,9 +91,9 @@ browser.runtime.onMessage.addListener((message) => {
 		const output = document.getElementById('proxyStatus');
 
 		if (message.success) {
-			output.textContent = '✅ Proxy is working!';
+			output.textContent = `✅ Proxy[${message.proxy}] is working!`;
 		} else {
-			output.textContent = `❌ Proxy failed: ${message.error || 'Unavailable'}`;
+			output.textContent = `❌ Proxy[${message.proxy}] failed: ${message.error || 'Unavailable'}`;
 		}
 	}
 });
