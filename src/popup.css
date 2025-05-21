@@ -1,38 +1,42 @@
 body {
-	width: 200px;
-	margin: 0;
-	font-size: 0.9rem;
+	width: 100vw;
+	max-width: 350px;   /* or your desired desktop max width */
+	min-width: 200px;   /* set a minimum for usability */
+	margin: 0 auto;
+	font-size: 0.95rem;
 	text-align: center;
 	color: white;
 	background-color: #f78c25;
 	font-family: Montserrat, sans-serif;
+	padding: 0.5em;
+	box-sizing: border-box;
 }
 
 hr {
-	margin: 0 3px 1rem;
-	border: solid 1px rgba(255 255 255 / 20%);
+	margin: 0 0.3em 1em;
+	border: solid 0.08em rgb(255 255 255 / 20%);
 }
 
 .bigger {
-	font-size: 1.2rem;
+	font-size: 1.2em;
 }
 
 .cr-topbar {
-	padding: 8px 0;
+	padding: 0.5em 0;
 	display: block;
 }
 
 .cr-footerbar {
-	font-size: 0.7rem;
-	padding: 12px 0;
+	font-size: 0.75em;
+	padding: 0.8em 0;
 	display: block;
 	color: white;
 	background-color: #dc7c20;
 }
 
 .cr-topbar p {
-	font-size: 1.3rem;
-	margin: 3px 3px 0;
+	font-size: 1.2em;
+	margin: 0.25em 0.2em 0;
 	font-weight: bold;
 	font-family: Roboto, sans-serif;
 }
@@ -42,21 +46,31 @@ hr {
 }
 
 .cr-checkbox {
-	font-size: 1rem;
+	font-size: 1em;
+	vertical-align: middle;
 }
 
 .cr-button {
-	font-size: 1rem;
+	font-size: 1em;
 	color: #f38022;
-	min-width: 80%;
+	width: 85%;
+	max-width: 18em;
+	min-width: 6em;
 	cursor: pointer;
 	display: block;
-	margin: 10px auto 15px;
-	padding: 10px;
-	border-radius: 5px;
+	margin: 0.8em auto 1em;
+	padding: 0.65em 1.2em;
+	border-radius: 0.33em;
 	border: none;
 	background-color: white;
 	text-align: center;
+	transition: background 0.2s, color 0.2s;
+	box-sizing: border-box;
+}
+
+.cr-button:active {
+	background-color: #ffb268;
+	color: white;
 }
 
 .blink {
@@ -95,4 +109,14 @@ hr {
 	to {
 		opacity: 0;
 	}
+}
+
+body.mobile-popup .cr-button,
+body.mobile-popup .bigger {
+	font-size: 1.2em;
+	padding: 1em 0.5em;
+	width: 100%;
+}
+body.mobile-popup label {
+	font-size: 1.15em;
 }

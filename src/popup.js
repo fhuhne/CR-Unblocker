@@ -1,4 +1,40 @@
-var browser = browser || chrome;
+var browser = browser || chrome
+
+let proxyStatusInterval = null
+
+function setProxyStatusSection(show) {
+	const section = document.getElementById('proxy-status-section');
+	section.style.display = show ? 'block' : 'none';
+	if (!show) {
+		document.getElementById('proxyStatus').textContent = '';
+	}
+}
+function testProxyStatus() {
+	const statusEl = document.getElementById('proxyStatus');
+	statusEl.textContent = 'Connecting...';
+	statusEl.style.color = 'white';
+	statusEl.style.backgroundColor = 'transparent';
+
+	browser.runtime.sendMessage({
+		action: 'testCurrentProxy'
+	});
+}
+
+function handleSwitchRegionChange(enabled) {
+	if (enabled) {
+		setProxyStatusSection(true);
+		testProxyStatus();
+		if (!proxyStatusInterval) {
+			proxyStatusInterval = setInterval(testProxyStatus, 15000);
+		}
+	} else {
+		setProxyStatusSection(false);
+		if (proxyStatusInterval) {
+			clearInterval(proxyStatusInterval);
+			proxyStatusInterval = null;
+		}
+	}
+}
 
 /**
  * Open new tab on button click
@@ -41,4 +77,32 @@ addSettingCheckbox('switchRegion');
  */
 browser.runtime.sendMessage({ action: 'getSettings' }, (settings) => {
 	document.getElementById('switchRegion').checked = settings.switchRegion;
+	handleSwitchRegionChange(settings.switchRegion)
 });
+
+browser.runtime.onMessage.addListener((message) => {
+	if (message.event === 'settingsChanged') {
+		handleSwitchRegionChange(message.settings.switchRegion)
+	}
+})
+
+browser.runtime.onMessage.addListener((message) => {
+	if (message.event === 'proxyTestResult') {
+		const output = document.getElementById('proxyStatus');
+
+		if (message.success) {
+			output.textContent = `✅ Proxy[${message.proxy}] is working!`;
+		} else {
+			output.textContent = `❌ Proxy[${message.proxy}] failed: ${message.error || 'Unavailable'}`;
+		}
+	}
+});
+window.addEventListener('unload', () => {
+	if (proxyStatusInterval) {
+		clearInterval(proxyStatusInterval)
+	}
+})
+
+if (/android|iphone|ipad|mobile/i.test(navigator.userAgent)) {
+	document.body.classList.add('mobile-popup');
+}

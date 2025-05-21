@@ -6,7 +6,15 @@ var browser = browser || chrome;
  */
 ((global) => {
 	// Settings object with default settings
-	let settings = { switchRegion: true, socksCustom: false, socksHost: '', socksPort: 1080, socksUser: '', socksPass: '' };
+	let settings = {
+		switchRegion: true,
+		proxyCustom: false,
+		proxyHost: '',
+		proxyPort: 1080,
+		proxyUser: '',
+		proxyPass: '',
+		proxyType: 'socks'
+	}
 	let validSettings = Object.keys(settings);
 
 	/**

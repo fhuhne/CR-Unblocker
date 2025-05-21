@@ -1,55 +1,89 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>CR Unblocker Dashboard</title>
-		<link rel="stylesheet" href="dashboard.css" />
-	</head>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CR Unblocker Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css"/>
+</head>
 
-	<body>
-		<div class="tab-area">
-			<ul class="tabs">
-				<li><p class="brand">CR-Unblocker <span>v3.0.2</span></p></li>
-				<li class="active"><a href="#tab-settings">Settings</a></li>
-				<li><a href="#tab-about">About</a></li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab active" id="tab-settings">
-					<h2>Settings</h2>
-					<input type="checkbox" id="switchRegion" class="cr-checkbox" />
-					<label for="switchRegion">Switch region on Crunchyroll</label>
-					<h2>SOCKS configuration</h2>
-					<input type="checkbox" id="socksCustom" class="cr-checkbox" />
-					<label for="socksCustom">Use custom proxy</label>
-					<table>
-						<tr>
-							<td><label for="socksHost">Host</label></td>
-							<td><input type="text" id="socksHost"></td>
-						</tr>
-						<tr>
-							<td><label for="socksPort">Port</label></td>
-							<td><input type="text" id="socksPort"></td>
-						</tr>
-						<tr>
-							<td><label for="socksUser">Username</label></td>
-							<td><input type="text" id="socksUser"></td>
-						</tr>
-						<tr>
-							<td><label for="socksPass">Password</label></td>
-							<td><input type="password" id="socksPass"></td>
-						</tr>
-					</table>
-					<br>
-				</div>
-				<div class="tab" id="tab-about">
-					<h2>About</h2>
-					<ul>
-						<li><a target="_blank" href="https://cr-unblocker.us.to/">Changelog</a></li>
-						<li><a target="_blank" href="https://github.com/fhuhne/CR-Unblocker">Source code</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<script type="text/javascript" src="dashboard.js"></script>
-	</body>
+<body>
+<div class="tab-area">
+    <ul class="tabs">
+        <li><p class="brand">CR-Unblocker <span>v3.0.3</span></p></li>
+        <li class="active"><a href="#tab-settings">Settings</a></li>
+        <li><a href="#tab-about">About</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab active" id="tab-settings">
+            <h2>Settings</h2>
+            <input type="checkbox" id="switchRegion" class="cr-checkbox"/>
+            <label for="switchRegion">Switch region on Crunchyroll</label>
+
+            <h2>Proxy Configuration</h2>
+            <input type="checkbox" id="proxyCustom" class="cr-checkbox"/>
+            <label for="proxyCustom">Use custom proxy</label>
+
+            <table>
+                <tr>
+                    <td>
+                        <label for="proxyType">Proxy Type</label>
+                    </td>
+                    <td>
+                        <select id="proxyType">
+                            <option value="http">HTTP</option>
+                            <option value="socks">SOCKS5</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="proxyHost">Host</label></td>
+                    <td><input type="text" id="proxyHost"></td>
+                </tr>
+                <tr>
+                    <td><label for="proxyPort">Port</label></td>
+                    <td><input type="text" id="proxyPort"></td>
+                </tr>
+                <tr>
+                    <td><label for="proxyUser">Username</label></td>
+                    <td><input type="text" id="proxyUser"></td>
+                </tr>
+                <tr>
+                    <td><label for="proxyPass">Password</label></td>
+                    <td><input type="password" id="proxyPass"></td>
+                </tr>
+                <tr>
+                    <td><label for="proxyStatus">Current Proxy</label></td>
+                    <td><label id="proxyStatus"></label></td>
+                </tr>
+            </table>
+            <button
+                    id="testProxyBtn"
+                    class="cr-button"
+                    style="
+                        min-width: 0;
+                        width: auto;
+                        display: inline-block;
+                        margin: 10px 0 15px 0;
+                        padding: 7px 16px;
+                        font-size: 1rem;
+                        box-sizing: border-box;
+                      "
+            >
+                Test Proxy
+            </button>
+            <p id="proxyTestResult"></p>
+            <br>
+        </div>
+        <div class="tab" id="tab-about">
+            <h2>About</h2>
+            <ul>
+                <li><a target="_blank" href="https://cr-unblocker.us.to/">Changelog</a></li>
+                <li><a target="_blank" href="https://github.com/fhuhne/CR-Unblocker">Source code</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="dashboard.js"></script>
+</body>
 </html>
