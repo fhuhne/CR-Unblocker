@@ -8,6 +8,7 @@ var browser = browser || chrome;
 	// Settings object with default settings
 	let settings = {
 		switchRegion: true,
+		keepAlive: false,
 		proxyCustom: false,
 		proxyHost: '',
 		proxyPort: 1080,
@@ -43,8 +44,11 @@ var browser = browser || chrome;
 				changed[key] = keys[key];
 			}
 		}
+		console.log('Settings changed:', changed);
 		browser.runtime.sendMessage({ event: 'settingsChanged', changed: changed, settings: settings });
+		console.log('Settings saved')
 		browser.storage.local.set({ settings: settings });
+		browser.runtime.sendMessage({ event: 'sets', changed: changed, settings: settings });
 	}
 
 	/**
