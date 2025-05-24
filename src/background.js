@@ -16,6 +16,14 @@ let proxyTestError = null
 let proxyStatusInterval = null
 let activeCrunchyrollTabs = new Set();
 
+const bypassDomains = [
+	'static.crunchyroll.com',
+	'metrics.crunchyroll.com',
+	'eec.crunchyroll.com'
+];
+
+const staticExtensions = /\.(jpg|jpeg|png|gif|webp|mp4|m4s|js|css|woff2?|ttf|svg|ico|json|xml)$/i;
+
 async function getProxyConfig(settings) {
 	if (settings.proxyCustom) {
 		return {
@@ -32,7 +40,35 @@ async function getProxyConfig(settings) {
 }
 
 async function handleProxyRequest(requestInfo) {
-	const settings = this.settings.get()
+	if (requestInfo.type in [
+		'image',
+		'imageset',
+		'font',
+		'stylesheet',
+		'script',
+		'media',
+		'web_manifest',
+		'object',
+		'object_subrequest'
+	]) {
+		// Skip static resources
+		return
+	}
+
+	const urlObj = new URL(requestInfo.url);
+	const hostname = urlObj.hostname;
+	const pathname = urlObj.pathname;
+
+	const isBypass = staticExtensions.test(pathname)
+			|| bypassDomains.some(domain =>
+				hostname === domain || hostname.endsWith(`.${domain}`)
+			);
+
+	if (isBypass) {
+		return
+	}
+
+	const settings = this.settings.get();
 
 	if (!settings.switchRegion) {
 		console.log('Region switching disabled')
@@ -46,7 +82,7 @@ async function handleProxyRequest(requestInfo) {
 
 browser.proxy.onRequest.addListener(
 	handleProxyRequest,
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
+	{ urls: ['*://*.crunchyroll.com/*'] }
 )
 browser.webRequest.onAuthRequired.addListener(
 	() => {
@@ -63,7 +99,7 @@ browser.webRequest.onAuthRequired.addListener(
 			}
 		};
 	},
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token', '*://*.crunchyroll.com/'] },
+	{ urls: ['*://*.crunchyroll.com/*'] },
 	['blocking']
 );
 
@@ -113,11 +149,11 @@ async function testProxyConfig(proxy, sendResult) {
 
 	browser.proxy.onRequest.addListener(
 		testProxyHandler,
-		{ urls: ['*://*.crunchyroll.com/'] }
+		{ urls: ['https://static.crunchyroll.com/config/cx-web/config.json'] }
 	)
 
 	try {
-		const res = await fetchWithTimeout('https://www.crunchyroll.com', { method: 'HEAD', cache: 'no-store' }, 5000)
+		const res = await fetchWithTimeout('https://static.crunchyroll.com/config/cx-web/config.json', { method: 'HEAD', cache: 'no-store' }, 5000)
 		let result
 		if (proxyTestError) {
 			result = { success: false, error: proxyTestError }
