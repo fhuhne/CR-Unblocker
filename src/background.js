@@ -3,10 +3,10 @@ const browser = window.browser || window.chrome
 const DEFAULT_PROXY_CONFIG = {
 	type: 'socks',
 	proxyDNS: true,
-	host: 'cr-unblocker.us.to',
-	port: 1080,
-	username: 'crunblocker',
-	password: 'crunblocker',
+	host: 'us.community-proxy.meganeko.dev',
+	port: 5445,
+	username: 'GeoBypassCommunity-US',
+	password: 'UseWithRespect',
 	failoverTimeout: 3
 }
 
