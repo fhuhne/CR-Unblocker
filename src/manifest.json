@@ -20,7 +20,8 @@
     "*://*.cr-unblocker.us.to/*",
     "webRequest",
     "webRequestBlocking",
-    "proxy"
+    "proxy",
+    "tabs"
   ],
 
   "browser_action": {
