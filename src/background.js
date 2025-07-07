@@ -3,15 +3,26 @@ const browser = window.browser || window.chrome
 const DEFAULT_PROXY_CONFIG = {
 	type: 'socks',
 	proxyDNS: true,
-	host: 'cr-unblocker.us.to',
-	port: 1080,
-	username: 'crunblocker',
-	password: 'crunblocker',
+	host: 'us.community-proxy.meganeko.dev',
+	port: 5445,
+	username: 'GeoBypassCommunity-US',
+	password: 'UseWithRespect',
 	failoverTimeout: 3
 }
 
 let proxyTestInProgress = false
 let proxyTestError = null
+
+let proxyStatusInterval = null
+let activeCrunchyrollTabs = new Set();
+
+const bypassDomains = [
+	'static.crunchyroll.com',
+	'metrics.crunchyroll.com',
+	'eec.crunchyroll.com'
+];
+
+const staticExtensions = /\.(jpg|jpeg|png|gif|webp|mp4|m4s|js|css|woff2?|ttf|svg|ico|json|xml)$/i;
 
 async function getProxyConfig(settings) {
 	if (settings.proxyCustom) {
@@ -29,7 +40,35 @@ async function getProxyConfig(settings) {
 }
 
 async function handleProxyRequest(requestInfo) {
-	const settings = this.settings.get()
+	if (requestInfo.type in [
+		'image',
+		'imageset',
+		'font',
+		'stylesheet',
+		'script',
+		'media',
+		'web_manifest',
+		'object',
+		'object_subrequest'
+	]) {
+		// Skip static resources
+		return
+	}
+
+	const urlObj = new URL(requestInfo.url);
+	const hostname = urlObj.hostname;
+	const pathname = urlObj.pathname;
+
+	const isBypass = staticExtensions.test(pathname)
+			|| bypassDomains.some(domain =>
+				hostname === domain || hostname.endsWith(`.${domain}`)
+			);
+
+	if (isBypass) {
+		return
+	}
+
+	const settings = this.settings.get();
 
 	if (!settings.switchRegion) {
 		console.log('Region switching disabled')
@@ -43,7 +82,7 @@ async function handleProxyRequest(requestInfo) {
 
 browser.proxy.onRequest.addListener(
 	handleProxyRequest,
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token'] }
+	{ urls: ['*://*.crunchyroll.com/*'] }
 )
 browser.webRequest.onAuthRequired.addListener(
 	() => {
@@ -60,7 +99,7 @@ browser.webRequest.onAuthRequired.addListener(
 			}
 		};
 	},
-	{ urls: ['*://*.crunchyroll.com/auth/v1/token', '*://*.crunchyroll.com/'] },
+	{ urls: ['*://*.crunchyroll.com/*'] },
 	['blocking']
 );
 
@@ -110,11 +149,11 @@ async function testProxyConfig(proxy, sendResult) {
 
 	browser.proxy.onRequest.addListener(
 		testProxyHandler,
-		{ urls: ['*://*.crunchyroll.com/'] }
+		{ urls: ['https://static.crunchyroll.com/config/cx-web/config.json'] }
 	)
 
 	try {
-		const res = await fetchWithTimeout('https://www.crunchyroll.com', { method: 'GET', cache: 'no-store' }, 5000)
+		const res = await fetchWithTimeout('https://static.crunchyroll.com/config/cx-web/config.json', { method: 'HEAD', cache: 'no-store' }, 5000)
 		let result
 		if (proxyTestError) {
 			result = { success: false, error: proxyTestError }
@@ -152,3 +191,83 @@ browser.runtime.onMessage.addListener(async(message) => {
 		return true
 	}
 })
+
+
+function maybeUpdateProxyKeepAlive() {
+	const settings = this.settings.get();
+	const shouldKeepAlive = settings.switchRegion && settings.keepAlive && activeCrunchyrollTabs.size > 0;
+
+	if (shouldKeepAlive && !proxyStatusInterval) {
+		console.log('Starting keep-alive pings');
+		keepAliveProxyStatus();
+		proxyStatusInterval = setInterval(keepAliveProxyStatus, 15000);
+	} else if (!shouldKeepAlive && proxyStatusInterval) {
+		console.log('Stopping keep-alive pings');
+		clearInterval(proxyStatusInterval);
+		proxyStatusInterval = null;
+	}
+}
+
+async function keepAliveProxyStatus() {
+	const currentSettings = this.settings.get()
+	const proxyConfig = await getProxyConfig(currentSettings)
+	await testProxyConfig(proxyConfig, result => {
+		console.log(`Keep alive proxy: ${result.success ? 'Success' : 'Failure'}`)
+	})
+}
+
+/*
+ * Query all active Crunchyroll tabs when the extension loads.
+ * Adds non-discarded Crunchyroll tabs to the activeCrunchyrollTabs set.
+ */
+browser.tabs.query({ url: '*://*.crunchyroll.com/*' }).then(tabs => {
+	for (const tab of tabs) {
+		if (!tab.discarded) {
+			activeCrunchyrollTabs.add(tab.id);
+		}
+	}
+	maybeUpdateProxyKeepAlive();
+});
+
+/*
+ * Listener for tab URL updates.
+ * If the URL changes to a Crunchyroll page and the tab is active, add it to the set.
+ * If the URL is not a Crunchyroll page or the tab is discarded, remove it from the set.
+ */
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+	if (changeInfo.url) {
+		const isCrunchyroll = changeInfo.url.includes('crunchyroll.com');
+		if (isCrunchyroll && !tab.discarded) {
+			activeCrunchyrollTabs.add(tabId);
+		} else {
+			activeCrunchyrollTabs.delete(tabId);
+		}
+
+		maybeUpdateProxyKeepAlive();
+	}
+});
+
+/*
+ * Listener for when the active tab changes (user switches tabs).
+ * If the new tab is a Crunchyroll page and is not discarded, add it to the set.
+ */
+browser.tabs.onActivated.addListener(async({ tabId }) => {
+	const tab = await browser.tabs.get(tabId);
+	if (
+		tab.url.includes('crunchyroll.com') && !tab.discarded
+	) {
+		activeCrunchyrollTabs.add(tab.id);
+		maybeUpdateProxyKeepAlive();
+	}
+});
+
+/*
+ * Listener for when a tab is closed.
+ * If the closed tab was tracked as a Crunchyroll tab, remove it from the set.
+ */
+browser.tabs.onRemoved.addListener((tabId) => {
+	if (activeCrunchyrollTabs.has(tabId)) {
+		activeCrunchyrollTabs.delete(tabId);
+		maybeUpdateProxyKeepAlive();
+	}
+});

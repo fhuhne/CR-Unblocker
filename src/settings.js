@@ -8,6 +8,7 @@ var browser = browser || chrome;
 	// Settings object with default settings
 	let settings = {
 		switchRegion: true,
+		keepAlive: false,
 		proxyCustom: false,
 		proxyHost: '',
 		proxyPort: 1080,
