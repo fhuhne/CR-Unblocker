@@ -1,57 +1,107 @@
 <html>
-    <head>
-        <title>CR-Unblocker</title>
-    </head>
-    <body style="font-family: sans-serif">
-        <div style="max-width:700px;margin:auto;">
-            <h1>Crunchyroll Unblocker</h1>
-            <hr>
-            <h2>Download</h2>
-            <p>Firefox Users can get the extension <a href="https://addons.mozilla.org/de/firefox/addon/crunchy-unblocker/">here</a>.</p>
-            <h2>Changelog</h2>
-            <h3>3.0.2 - Error handling</h3>
-            <p>Up unitl now, every time the proxy server had issues users were presented with never ending loading screens on Crunchyroll. This should be handled better now.</p>
-            <ul>
-                <li>Added a notification that shows up on incorrect proxy settings.</li>
-                <li>Added a fallback when the proxy runs into a timeout to not use the proxy.</li>
-            </ul>
-            <h3>3.0.1 - A housekeeping update</h3>
-            <p>This release fixes some bugs and removes the code used for "old crunchyroll".</p>
-            <ul>
-                <li>Removed legacy code</li>
-                <li>Do not display password for custom proxy configuration</li>
-                <li>Fix checkbox not displaying correct setting for custom proxy configuration</li>
-                <li>Use DNS of proxy service</li>
-            </ul>
-            <h3>3.0.0 - CR-Unblocker turns 3!</h3>
-            <p>CR-Unblocker now supports the new Crunchyroll Beta. This means no longer being limited to non logged in usage.</p>
-            <ul>
-                <li>Proxy requests from new token endpoint using a SOCKS proxy.</li>
-                <li>Add options to set a custom proxy configuration in extension settings.</li>
-                <li>Remove logic handling user logins as we don't need to do that anymore.</li>
-                <li>Modernize some code paths for Crunchyroll Classic.</li>
-            </ul>
-            <h3>2.3.1</h3>
-            <p>Most issues seem to be errors getting new sessions. I think this is largely related to the reload loop. To improve on this I implemented a timer to only reload once a minute - if the session can not be obtained, it is unlikely to work a few seconds after.</p>
-            <ul>
-                <li>Added timer between session reloads</li>
-            </ul>
-            <h3>2.3</h3>
-            <p>Good news: unblocking while logged in is back!</p>
-            <p>Some of you have hinted me a way but I could not replicate it for some reason. Thanks for telling me, and sorry for not getting this working sooner :)</p>
-            <ul>
-                <li>Fixed login handling</li>
-                <li>Added disable button to popup to quickly disable the addon</li>
-            </ul>
-            <h3>2.2.3</h3>
-            <p>This is just a small update, sorry still no solution for logged in users :(</p>
-            <p>But I removed the unblock servers that do not work anymore, this should make switching faster.</p>
-            <p>Also, region switching won't happen while logged in. This way you can login/logout depending on the anime you want to watch. Still inconvenient, but better than nothing!</p>
-            <h3>2.2.2b</h3>
-            <p>Hi everyone! Maintainer from the Firefox extension here.</p>
-            <p>Looks like the original creator (who is hosting the unblock server) of this project has no interest in keeping this up. This is why I'm taking over from here on.</p>
-            <p>He said in his "farewell" message to just torrent anime. Please do not do that. Support the anime you love to watch, even more in these challenging times. I'll add some servers to the unblocker pool to "fix" the current problems of session IDs getting issued. Please keep in mind, my resources are limited. If anyone wants to help running unblock servers <a href="https://twitter.com/CrUnblocker">get in touch with me</a>.</p>
-            <p>Greetings from Germany. Stay safe and healthy!!!</p>
-        </div>
-    </body>
+
+<head>
+    <title>CR-Unblocker</title>
+</head>
+
+<body style="font-family: sans-serif">
+    <div style="max-width:700px;margin:auto;">
+        <h1>Crunchyroll Unblocker</h1>
+        <hr>
+        <h2>Download</h2>
+        <p>Firefox Users can get the extension <a
+                href="https://addons.mozilla.org/de/firefox/addon/crunchy-unblocker/">here</a>.</p>
+        <h2>Announcements</h2>
+        <h3>Change of ownership</h3>
+        <p>Hello everyone!</p>
+        <p>
+            It's been about 5 years since I started hosting the unblocker server and updating the app from time to time
+            when needed.
+        </p>
+        <p>
+            While the project itself does not require a lot of time anymore (just an occasional restart of the server),
+            it does take <b>*some*</b> time and more importantly resources from my side. The truth is, I haven't been
+            using this extension by myself for quite some time now. Crunchyrolls catalogue in Germany keeps growing and
+            there are only few titles not available. I know this is not true for every country, so YMMV. But ever since
+            moving to Japan I can't access Crunchyroll without a VPN at all, so this way of unlocking titles became
+            unavailable to me.
+        </p>
+        <p>
+            For this reason <b>I decided to end hosting the unblocker server by the end
+                of the current season (~ end of June 2025)</b>.
+        </p>
+        <p>
+            Good news: one of you decided to step in! Starting with the 3.2.0 Update
+            <a href="https://github.com/MeGaNeKoS">MeGaNeKoS</a> will operate a new unblock server and take care of the
+            extension.
+        </p>
+        <h2>Changelog</h2>
+        <h3>3.2.0 - New default proxy and improved access for restricted regions</h3>
+        <p>This release changes the default proxy as per the announcement message and some improvements for the proxy
+            handling.</p>
+        <ul>
+            <li>Change default proxy endpoint</li>
+            <li>Reduce load on proxy availability check</li>
+            <li>Proxy the initial website load to allow access from restricted regions like Japan</li>
+        </ul>
+        <h3>3.1.0 - HTTP proxy support and status check</h3>
+        <p>This release adds support for HTTP proxies. It also features some UI improvements together with an
+            availability check for the current proxy server.</p>
+        <h3>3.0.2 - Error handling</h3>
+        <p>Up unitl now, every time the proxy server had issues users were presented with never ending loading screens
+            on Crunchyroll. This should be handled better now.</p>
+        <ul>
+            <li>Added a notification that shows up on incorrect proxy settings.</li>
+            <li>Added a fallback when the proxy runs into a timeout to not use the proxy.</li>
+        </ul>
+        <h3>3.0.1 - A housekeeping update</h3>
+        <p>This release fixes some bugs and removes the code used for "old crunchyroll".</p>
+        <ul>
+            <li>Removed legacy code</li>
+            <li>Do not display password for custom proxy configuration</li>
+            <li>Fix checkbox not displaying correct setting for custom proxy configuration</li>
+            <li>Use DNS of proxy service</li>
+        </ul>
+        <h3>3.0.0 - CR-Unblocker turns 3!</h3>
+        <p>CR-Unblocker now supports the new Crunchyroll Beta. This means no longer being limited to non logged in
+            usage.</p>
+        <ul>
+            <li>Proxy requests from new token endpoint using a SOCKS proxy.</li>
+            <li>Add options to set a custom proxy configuration in extension settings.</li>
+            <li>Remove logic handling user logins as we don't need to do that anymore.</li>
+            <li>Modernize some code paths for Crunchyroll Classic.</li>
+        </ul>
+        <h3>2.3.1</h3>
+        <p>Most issues seem to be errors getting new sessions. I think this is largely related to the reload loop. To
+            improve on this I implemented a timer to only reload once a minute - if the session can not be obtained, it
+            is unlikely to work a few seconds after.</p>
+        <ul>
+            <li>Added timer between session reloads</li>
+        </ul>
+        <h3>2.3</h3>
+        <p>Good news: unblocking while logged in is back!</p>
+        <p>Some of you have hinted me a way but I could not replicate it for some reason. Thanks for telling me, and
+            sorry for not getting this working sooner :)</p>
+        <ul>
+            <li>Fixed login handling</li>
+            <li>Added disable button to popup to quickly disable the addon</li>
+        </ul>
+        <h3>2.2.3</h3>
+        <p>This is just a small update, sorry still no solution for logged in users :(</p>
+        <p>But I removed the unblock servers that do not work anymore, this should make switching faster.</p>
+        <p>Also, region switching won't happen while logged in. This way you can login/logout depending on the anime you
+            want to watch. Still inconvenient, but better than nothing!</p>
+        <h3>2.2.2b</h3>
+        <p>Hi everyone! Maintainer from the Firefox extension here.</p>
+        <p>Looks like the original creator (who is hosting the unblock server) of this project has no interest in
+            keeping this up. This is why I'm taking over from here on.</p>
+        <p>He said in his "farewell" message to just torrent anime. Please do not do that. Support the anime you love to
+            watch, even more in these challenging times. I'll add some servers to the unblocker pool to "fix" the
+            current problems of session IDs getting issued. Please keep in mind, my resources are limited. If anyone
+            wants to help running unblock servers <a href="https://twitter.com/CrUnblocker">get in touch with me</a>.
+        </p>
+        <p>Greetings from Germany. Stay safe and healthy!</p>
+    </div>
+</body>
+
 </html>

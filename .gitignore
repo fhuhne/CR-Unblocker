@@ -6,3 +6,6 @@ extension.crx
 extension.pem
 .vscode
 *.log
+
+# OS files
+.DS_Store

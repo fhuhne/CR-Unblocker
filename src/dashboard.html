@@ -1,71 +1,71 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CR Unblocker Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css"/>
+    <link rel="stylesheet" href="dashboard.css" />
 </head>
 
 <body>
-<div class="tab-area">
-    <ul class="tabs">
-        <li><p class="brand">CR-Unblocker <span>v3.0.3</span></p></li>
-        <li class="active"><a href="#tab-settings">Settings</a></li>
-        <li><a href="#tab-about">About</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab active" id="tab-settings">
-            <h2>Settings</h2>
-            <input type="checkbox" id="switchRegion" class="cr-checkbox"/>
-            <label for="switchRegion">Switch region on Crunchyroll</label>
+    <div class="tab-area">
+        <ul class="tabs">
+            <li>
+                <p class="brand">CR-Unblocker <span>v3.2.0</span></p>
+            </li>
+            <li class="active"><a href="#tab-settings">Settings</a></li>
+            <li><a href="#tab-about">About</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab active" id="tab-settings">
+                <h2>Settings</h2>
+                <input type="checkbox" id="switchRegion" class="cr-checkbox" />
+                <label for="switchRegion">Switch region on Crunchyroll</label>
 
-            <h2>Proxy Configuration</h2>
-            <input type="checkbox" id="keepAlive" class="cr-checkbox"/>
-            <label for="keepAlive"
-                   title="Keeps the proxy connection active. Some providers terminate idle connections, so this prevents that.">Keep
-                Alive</label>
-            <br>
-            <input type="checkbox" id="proxyCustom" class="cr-checkbox"/>
-            <label for="proxyCustom">Use custom proxy</label>
+                <h2>Proxy Configuration</h2>
+                <input type="checkbox" id="keepAlive" class="cr-checkbox" />
+                <label for="keepAlive"
+                    title="Keeps the proxy connection active. Some providers terminate idle connections, so this prevents that.">Keep
+                    Alive</label>
+                <br>
+                <input type="checkbox" id="proxyCustom" class="cr-checkbox" />
+                <label for="proxyCustom">Use custom proxy</label>
 
-            <table>
-                <tr>
-                    <td>
-                        <label for="proxyType">Proxy Type</label>
-                    </td>
-                    <td>
-                        <select id="proxyType">
-                            <option value="http">HTTP</option>
-                            <option value="socks">SOCKS5</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label for="proxyHost">Host</label></td>
-                    <td><input type="text" id="proxyHost"></td>
-                </tr>
-                <tr>
-                    <td><label for="proxyPort">Port</label></td>
-                    <td><input type="text" id="proxyPort"></td>
-                </tr>
-                <tr>
-                    <td><label for="proxyUser">Username</label></td>
-                    <td><input type="text" id="proxyUser"></td>
-                </tr>
-                <tr>
-                    <td><label for="proxyPass">Password</label></td>
-                    <td><input type="password" id="proxyPass"></td>
-                </tr>
-                <tr>
-                    <td><label for="proxyStatus">Current Proxy</label></td>
-                    <td><label id="proxyStatus"></label></td>
-                </tr>
-            </table>
-            <button
-                    id="testProxyBtn"
-                    class="cr-button"
-                    style="
+                <table>
+                    <tr>
+                        <td>
+                            <label for="proxyType">Proxy Type</label>
+                        </td>
+                        <td>
+                            <select id="proxyType">
+                                <option value="http">HTTP</option>
+                                <option value="socks">SOCKS5</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="proxyHost">Host</label></td>
+                        <td><input type="text" id="proxyHost"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="proxyPort">Port</label></td>
+                        <td><input type="text" id="proxyPort"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="proxyUser">Username</label></td>
+                        <td><input type="text" id="proxyUser"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="proxyPass">Password</label></td>
+                        <td><input type="password" id="proxyPass"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="proxyStatus">Current Proxy</label></td>
+                        <td><label id="proxyStatus"></label></td>
+                    </tr>
+                </table>
+                <button id="testProxyBtn" class="cr-button" style="
                         min-width: 0;
                         width: auto;
                         display: inline-block;
@@ -73,44 +73,47 @@
                         padding: 7px 16px;
                         font-size: 1rem;
                         box-sizing: border-box;
-                      "
-            >
-                Test Proxy
-            </button>
-            <p id="proxyTestResult"></p>
-            <br>
-        </div>
-        <div class="tab" id="tab-about">
-            <h2>About</h2>
-            <ul>
-                <li><a href="https://cr-unblocker.us.to/" target="_blank">Changelog</a> – See what's new!</li>
-                <li><a href="https://github.com/fhuhne/CR-Unblocker" target="_blank" rel="noopener">Source code</a> –
-                    Check out how it works or contribute!
-                </li>
-                <li>
-                    <b>Looking for something more flexible?</b><br>
-                    Try my other extension,
-                    <a href="https://github.com/MeGaNeKoS/GeoBypasser" target="_blank" rel="noopener"><b>GeoBypasser</b></a>!
-                    <br>
-                    It’s designed to be much more generic, letting you set up custom rules per website. That means you
-                    can easily access not just Crunchyroll, but also BiliBili and pretty much any other
-                    region-restricted site—without the hassle. Same simple idea, just way broader support!
-                </li>
-                <li>
-                    <b>Support CR-Unblocker!</b><br>
-                    If you find this extension useful, please consider
-                    <a href="https://ko-fi.com/meganeko__" target="_blank" rel="noopener">buying me a coffee on
-                        Ko-fi</a> or
-                    <a href="https://www.patreon.com/c/__meganeko__" target="_blank" rel="noopener">supporting on
-                        Patreon</a>.
-                    <br>
-                    Every bit helps keep the free proxy running for everyone. Thank you! ❤️
-                </li>
-            </ul>
-        </div>
+                      ">
+                    Test Proxy
+                </button>
+                <p id="proxyTestResult"></p>
+                <br>
+            </div>
+            <div class="tab" id="tab-about">
+                <h2>About</h2>
+                <ul>
+                    <li><a href="https://cr-unblocker.us.to/" target="_blank">Changelog</a> – See what's new!</li>
+                    <li><a href="https://github.com/fhuhne/CR-Unblocker" target="_blank" rel="noopener">Source code</a>
+                        –
+                        Check out how it works or contribute!
+                    </li>
+                    <li>
+                        <b>Looking for something more flexible?</b><br>
+                        Try my other extension,
+                        <a href="https://github.com/MeGaNeKoS/GeoBypasser" target="_blank"
+                            rel="noopener"><b>GeoBypasser</b></a>!
+                        <br>
+                        It’s designed to be much more generic, letting you set up custom rules per website. That means
+                        you
+                        can easily access not just Crunchyroll, but also BiliBili and pretty much any other
+                        region-restricted site—without the hassle. Same simple idea, just way broader support!
+                    </li>
+                    <li>
+                        <b>Support CR-Unblocker!</b><br>
+                        If you find this extension useful, please consider
+                        <a href="https://ko-fi.com/meganeko__" target="_blank" rel="noopener">buying me a coffee on
+                            Ko-fi</a> or
+                        <a href="https://www.patreon.com/c/__meganeko__" target="_blank" rel="noopener">supporting on
+                            Patreon</a>.
+                        <br>
+                        Every bit helps keep the free proxy running for everyone. Thank you! ❤️
+                    </li>
+                </ul>
+            </div>
 
+        </div>
     </div>
-</div>
-<script type="text/javascript" src="dashboard.js"></script>
+    <script type="text/javascript" src="dashboard.js"></script>
 </body>
+
 </html>
